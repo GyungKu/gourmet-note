@@ -1,6 +1,6 @@
-package com.gk.my_secret_review.restaurant.vo;
+package com.gk.my_secret_review.shop.vo;
 
-public record RequestRestaurant(
+public record RequestShop(
         String title,
         String description,
         String detailLink,

@@ -1,14 +1,16 @@
-package com.gk.my_secret_review.restaurant.entity;
+package com.gk.my_secret_review.shop.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class RestaurantEntity {
+@Table(name = "shop")
+public class ShopEntity {
 
     @Id
     private Long id;
