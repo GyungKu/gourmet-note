@@ -20,17 +20,19 @@ public class UserEntity {
     private String naverId;
     private String email;
     private String gender;
-    private String birth;
-    private String ageGroup;
+    private String birthday;
+    private String birthyear;
+    private String age;
     private String username;
 
     @Builder
-    public UserEntity(String naverId, String email, String gender, String birth, String ageGroup, String username) {
+    public UserEntity(String naverId, String email, String gender, String birthday, String birthyear, String age, String username) {
         this.naverId = naverId;
         this.email = email;
         this.gender = gender;
-        this.birth = birth;
-        this.ageGroup = ageGroup;
+        this.birthday = birthday;
+        this.birthyear = birthyear;
+        this.age = age;
         this.username = username;
     }
 }

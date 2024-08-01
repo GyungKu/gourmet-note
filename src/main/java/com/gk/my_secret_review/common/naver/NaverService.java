@@ -26,6 +26,11 @@ public class NaverService {
     @Value("${naver.client_id}")
     private String clientId;
 
+    public NaverUserInfo login(String code) {
+        NaverToken token = getTokenFromCode(code);
+        return getUserInfoFromToken(token.access_token());
+    }
+
     public ResponseShopList getAllByQuery(String query) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("query", query);
@@ -47,6 +52,32 @@ public class NaverService {
                 .build()
                 .encode(StandardCharsets.UTF_8)
                 .toUri();
+    }
+
+    private URI getURI(String url, String path) {
+        return getURI(url, path, null);
+    }
+
+    private NaverToken getTokenFromCode(String code) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", clientId);
+        params.add("client_secret", secret);
+        params.add("code", code);
+        params.add("state", "1234");
+        URI uri = getURI("https://nid.naver.com/oauth2.0", "/token", params);
+
+        return restClient.get().uri(uri).retrieve().body(NaverToken.class);
+    }
+
+    private NaverUserInfo getUserInfoFromToken(String accessToken) {
+        URI uri = getURI("https://openapi.naver.com", "/v1/nid/me");
+        return restClient.get()
+                .uri(uri)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .body(NaverResponse.class)
+                .response();
     }
 
     private Consumer<HttpHeaders> getDefaultHeaders() {

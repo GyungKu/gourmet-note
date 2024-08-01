@@ -1,4 +1,4 @@
-package com.gk.my_secret_review.common;
+package com.gk.my_secret_review.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
