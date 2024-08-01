@@ -19,3 +19,7 @@ spring:
 
 admin:
   verify_code: adminSignupCode
+
+naver:
+  client_id: k249sBMq5r9cVE7DY_W3
+  secret: tQ3QKOiA2h

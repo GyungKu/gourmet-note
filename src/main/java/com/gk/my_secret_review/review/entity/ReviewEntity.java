@@ -20,6 +20,7 @@ public class ReviewEntity {
     private String item;
     private Long shopId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopId", insertable = false, updatable = false,
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private ShopEntity shop;
