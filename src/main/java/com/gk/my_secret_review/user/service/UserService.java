@@ -3,6 +3,7 @@ package com.gk.my_secret_review.user.service;
 import com.gk.my_secret_review.common.naver.NaverService;
 import com.gk.my_secret_review.common.naver.NaverUserInfo;
 import com.gk.my_secret_review.user.entity.UserEntity;
+import com.gk.my_secret_review.user.entity.UserRole;
 import com.gk.my_secret_review.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class UserService {
                                 .birthyear(naverUser.birthyear())
                                 .age(naverUser.age())
                                 .username(UUID.randomUUID().toString())
+                                .role(UserRole.USER)
                                 .build()));
     }
 }

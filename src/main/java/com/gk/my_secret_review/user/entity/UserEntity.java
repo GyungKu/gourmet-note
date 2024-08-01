@@ -1,9 +1,6 @@
 package com.gk.my_secret_review.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +22,11 @@ public class UserEntity {
     private String age;
     private String username;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @Builder
-    public UserEntity(String naverId, String email, String gender, String birthday, String birthyear, String age, String username) {
+    public UserEntity(String naverId, String email, String gender, String birthday, String birthyear, String age, String username, UserRole role) {
         this.naverId = naverId;
         this.email = email;
         this.gender = gender;
@@ -34,5 +34,6 @@ public class UserEntity {
         this.birthyear = birthyear;
         this.age = age;
         this.username = username;
+        this.role = role;
     }
 }
