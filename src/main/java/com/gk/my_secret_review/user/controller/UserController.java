@@ -29,6 +29,7 @@ public class UserController {
         LoginUser loginUser = LoginUser.builder()
                 .id(userEntity.getId())
                 .username(userEntity.getUsername())
+                .role(userEntity.getRole())
                 .build();
         session.setAttribute("login", loginUser);
 
