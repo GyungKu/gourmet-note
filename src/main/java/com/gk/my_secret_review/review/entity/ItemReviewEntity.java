@@ -9,28 +9,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "review")
-public class ReviewEntity {
+@Table(name = "itemReview")
+public class ItemReviewEntity {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    private String title;
     private Float score;
     private String reviews;
-    private String item;
-    private Long shopId;
+    private Long shopReviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopId", insertable = false, updatable = false,
+    @JoinColumn(name = "shopReviewId", insertable = false, updatable = false,
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private ShopEntity shop;
+    private ShopReviewEntity shopReview;
 
     @Builder
-    public ReviewEntity(Float score, String reviews, String item, Long shopId, ShopEntity shop) {
+    public ItemReviewEntity(String title, Float score, String reviews, Long shopReviewId) {
+        this.title = title;
         this.score = score;
         this.reviews = reviews;
-        this.item = item;
-        this.shopId = shopId;
-        this.shop = shop;
+        this.shopReviewId = shopReviewId;
     }
 }

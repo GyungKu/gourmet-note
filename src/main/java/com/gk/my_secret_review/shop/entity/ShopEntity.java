@@ -18,19 +18,11 @@ public class ShopEntity {
     @GeneratedValue
     private Long id;
     private String title;
-    private String description;
-    private String detailLink;
-    private String category;
-    private String telephone;
     private String address;
 
     @Builder
-    public ShopEntity(String title, String description, String detailLink, String category, String telephone, String address) {
+    public ShopEntity(String title, String address) {
         this.title = title;
-        this.description = description;
-        this.detailLink = detailLink;
-        this.category = category;
-        this.telephone = telephone;
         this.address = address;
     }
 }

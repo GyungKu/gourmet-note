@@ -6,11 +6,6 @@ import java.util.List;
 
 public record RequestShop(
         String title,
-        String description,
-        String detailLink,
-        String category,
-        String telephone,
-        String address,
-        List<RequestReview> reviewList
+        String address
 ) {
 }
