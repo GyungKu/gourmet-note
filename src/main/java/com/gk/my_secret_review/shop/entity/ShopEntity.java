@@ -19,10 +19,12 @@ public class ShopEntity {
     private Long id;
     private String title;
     private String address;
+    private String link;
 
     @Builder
-    public ShopEntity(String title, String address) {
+    public ShopEntity(String title, String address, String link) {
         this.title = title;
         this.address = address;
+        this.link = link;
     }
 }

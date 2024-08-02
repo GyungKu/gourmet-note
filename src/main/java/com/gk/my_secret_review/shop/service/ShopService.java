@@ -39,6 +39,7 @@ public class ShopService {
                 .orElseGet(() -> repository.save(ShopEntity.builder()
                         .title(request.title())
                         .address(request.address())
+                        .link(request.link())
                         .build())
                 );
     }

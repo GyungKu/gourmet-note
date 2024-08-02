@@ -6,6 +6,7 @@ import java.util.List;
 
 public record RequestShop(
         String title,
-        String address
+        String address,
+        String link
 ) {
 }
