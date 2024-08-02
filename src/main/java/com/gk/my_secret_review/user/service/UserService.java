@@ -8,6 +8,7 @@ import com.gk.my_secret_review.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -20,20 +21,23 @@ public class UserService {
     public UserEntity naverLogin(String code) {
         NaverUserInfo naverUser = naverService.login(code);
         return getOrSaveByNaverUserInfo(naverUser);
+
     }
 
     private UserEntity getOrSaveByNaverUserInfo(NaverUserInfo naverUser) {
-        return repository.findByNaverId(naverUser.id())
-                .orElse(repository
-                        .save(UserEntity.builder()
-                                .naverId(naverUser.id())
-                                .email(naverUser.email())
-                                .gender(naverUser.gender())
-                                .birthday(naverUser.birthday())
-                                .birthyear(naverUser.birthyear())
-                                .age(naverUser.age())
-                                .username(UUID.randomUUID().toString())
-                                .role(UserRole.USER)
-                                .build()));
+        Optional<UserEntity> userEntity = repository.findByNaverId(naverUser.id());
+        if (userEntity.isEmpty()) {
+            return UserEntity.builder()
+                    .naverId(naverUser.id())
+                    .email(naverUser.email())
+                    .gender(naverUser.gender())
+                    .birthday(naverUser.birthday())
+                    .birthyear(naverUser.birthyear())
+                    .age(naverUser.age())
+                    .username(UUID.randomUUID().toString())
+                    .role(UserRole.USER)
+                    .build();
+        }
+        return userEntity.get();
     }
 }
