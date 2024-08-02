@@ -35,6 +35,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     private void setAuthenticate(LoginUser loginUser) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(createAuthentication(loginUser));
+        SecurityContextHolder.setContext(context);
     }
 
     private Authentication createAuthentication(LoginUser loginUser) {
