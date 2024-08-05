@@ -30,7 +30,8 @@ public class ShopService {
             throw new RuntimeException("검색어를 입력해주세요");
         }
         ResponseShopList responseBody = naverService.getAllByQuery(query);
-        responseBody.items().forEach(i -> i.replaceTitle());
+        responseBody.items()
+                .forEach(i -> i.replaceTitle());
         return responseBody;
     }
 
@@ -42,15 +43,6 @@ public class ShopService {
                         .link(request.link())
                         .build())
                 );
-    }
-
-    private URI getURI(String url, String path, MultiValueMap<String, String> params) {
-        return UriComponentsBuilder.fromUriString(url)
-                .path(path)
-                .queryParams(params)
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUri();
     }
 
 }

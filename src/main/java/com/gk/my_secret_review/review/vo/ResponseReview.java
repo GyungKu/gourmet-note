@@ -1,6 +1,6 @@
 package com.gk.my_secret_review.review.vo;
 
-import com.gk.my_secret_review.shop.vo.RequestShop;
+import com.gk.my_secret_review.image.vo.ResponseImage;
 import com.gk.my_secret_review.shop.vo.ResponseShop;
 import lombok.Builder;
 
@@ -12,6 +12,7 @@ public record ResponseReview(
         Float score,
         String reviews,
         ResponseShop shop,
-        List<ResponseItemReview> items
+        List<ResponseItemReview> items,
+        List<ResponseImage> images
 ) {
 }

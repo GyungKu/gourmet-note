@@ -13,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +27,12 @@ public class ReviewController {
     private final ReviewService service;
 
     @PostMapping
-    public ResponseEntity<Long> create(@RequestBody RequestReview request, @AuthenticationPrincipal LoginUser user) {
-        ShopReviewEntity shopReviewEntity = service.create(request, user.id());
+    public ResponseEntity<Long> create(@RequestPart(value = "request") RequestReview request,
+                                       @RequestPart(required = false) List<MultipartFile> files,
+                                       @AuthenticationPrincipal LoginUser user)
+            throws IOException {
+
+        ShopReviewEntity shopReviewEntity = service.create(request, user.id(), files);
         return ResponseEntity.status(HttpStatus.CREATED).body(shopReviewEntity.getId());
     }
 
