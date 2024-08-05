@@ -40,9 +40,7 @@ public class ReviewService {
     public ShopReviewEntity create(RequestReview request, Long userId, List<MultipartFile> files) throws IOException {
         ShopEntity shopEntity = shopService.create(request.shop()); // shop 저장 또는 꺼내와서 반환
 
-        if (!StringUtils.hasText(request.reviews()) && request.score() == null && request.items().size() == 0) {
-            throw new RuntimeException("리뷰 내용 또는 점수 또는 메뉴중 하나는 있어야합니다.");
-        }
+        validReview(request);
 
         ShopReviewEntity shopReview = shopReviewRepository.save(ShopReviewEntity.builder()
                 .score(request.score() == null ? 0 : request.score())
@@ -54,6 +52,7 @@ public class ReviewService {
         fileService.uploadImage(files, shopReview.getId());
         return shopReview;
     }
+
 
     public ResponseReview getReviewById(Long shopReviewId) {
         ShopReviewEntity shopReviewEntity = ShopReviewGetById(shopReviewId);
@@ -75,9 +74,9 @@ public class ReviewService {
                 .build();
     }
 
+
     public Page<ResponseReview> getByMyReview(Long userId, Integer page) {
-        Page<ShopReviewEntity> myReviews = shopReviewRepository.findAllByUserId(userId,
-                PageRequest.of(page - 1, 6));
+        Page<ShopReviewEntity> myReviews = getPagesByUserIdAndPage(userId, page);
 
         // shopReviewId 리스트로 itemReviewList 를 가져온 뒤 ShopReviewId로 묶어줌
         List<ItemReviewEntity> itemReviewEntityList = getItemReviewEntities(getReviewIds(myReviews.getContent()));
@@ -86,11 +85,14 @@ public class ReviewService {
         return getResponsePageFromEntities(myReviews, itemsMap);
     }
 
-    private ShopReviewEntity ShopReviewGetById(Long shopReviewId) {
-        return shopReviewRepository.findById(shopReviewId)
-                .orElseThrow(() -> {
-                    throw new RuntimeException("존재하지 않는 리뷰");
-                });
+    /**
+     * 내부 메소드
+     */
+
+    private void validReview(RequestReview request) {
+        if (!StringUtils.hasText(request.reviews()) && request.score() == null && request.items().size() == 0) {
+            throw new RuntimeException("리뷰 내용 또는 점수 또는 메뉴중 하나는 있어야합니다.");
+        }
     }
 
     private List<ItemReviewEntity> saveAllItemReview(List<RequestItemReview> items, Long shopReviewId) {
@@ -111,6 +113,26 @@ public class ReviewService {
         );
     }
 
+
+    private ShopReviewEntity ShopReviewGetById(Long shopReviewId) {
+        return shopReviewRepository.findById(shopReviewId)
+                .orElseThrow(() -> {
+                    throw new RuntimeException("존재하지 않는 리뷰");
+                });
+    }
+
+
+    private List<ResponseItemReview> getResponseItemReviewFromEntities(List<ItemReviewEntity> entities) {
+        if (entities == null) return null;
+        return entities.stream().map(ResponseItemReview::fromEntity).toList();
+    }
+
+
+    private Page<ShopReviewEntity> getPagesByUserIdAndPage(Long userId, Integer page) {
+        return shopReviewRepository.findAllByUserId(userId,
+                PageRequest.of(page - 1, 6));
+    }
+
     private List<Long> getReviewIds(List<ShopReviewEntity> entities) {
         return entities
                 .stream()
@@ -124,7 +146,9 @@ public class ReviewService {
         return entities;
     }
 
+
     private Map<Long, List<ItemReviewEntity>> getItemReviewGroupByShopReviewId(List<ItemReviewEntity> entities) {
+        if (entities == null) return null;
         return entities.stream()
                 .collect(Collectors
                         .groupingBy(ItemReviewEntity::getShopReviewId));
@@ -142,11 +166,6 @@ public class ReviewService {
                         .images(fileService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
                         .items(getResponseItemReviewFromEntities(itemsMap.get(r.getId()))) // 존재하면 List, 없으면 null
                         .build()
-            );
-    }
-
-    private List<ResponseItemReview> getResponseItemReviewFromEntities(List<ItemReviewEntity> entities) {
-        if (entities == null) return null;
-        return entities.stream().map(ResponseItemReview::fromEntity).toList();
+        );
     }
 }
