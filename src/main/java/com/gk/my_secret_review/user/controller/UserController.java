@@ -4,7 +4,9 @@ import com.gk.my_secret_review.user.entity.UserEntity;
 import com.gk.my_secret_review.user.service.UserService;
 import com.gk.my_secret_review.user.vo.LoginUser;
 import com.gk.my_secret_review.user.vo.ResponseUser;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,18 @@ public class UserController {
                 .build();
 
         return ResponseEntity.ok(responseUser);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("login");
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
     }
 
 }
