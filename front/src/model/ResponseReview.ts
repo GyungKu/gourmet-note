@@ -9,4 +9,5 @@ export interface ResponseReview {
   shop: Shop;
   items?: ResponseItemReview[];
   images?: ResponseImage[];
+  createdAt: Date;
 }
