@@ -33,4 +33,10 @@ public class ItemReviewEntity {
         this.reviews = reviews;
         this.shopReviewId = shopReviewId;
     }
+
+    public void update(String title, String reviews, Float score) {
+        this.title = title;
+        this.reviews = reviews;
+        this.score = score;
+    }
 }

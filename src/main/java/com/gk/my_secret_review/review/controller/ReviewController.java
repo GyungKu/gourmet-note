@@ -4,7 +4,9 @@ import com.gk.my_secret_review.review.entity.ShopReviewEntity;
 import com.gk.my_secret_review.review.service.ReviewService;
 import com.gk.my_secret_review.review.vo.RequestReview;
 import com.gk.my_secret_review.review.vo.ResponseReview;
+import com.gk.my_secret_review.review.vo.UpdateReview;
 import com.gk.my_secret_review.user.vo.LoginUser;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,7 @@ public class ReviewController {
     private final ReviewService service;
 
     @PostMapping
-    public ResponseEntity<Long> create(@RequestPart(value = "request") RequestReview request,
+    public ResponseEntity<Long> create(@Valid @RequestPart(value = "request") RequestReview request,
                                        @RequestPart(required = false) List<MultipartFile> files,
                                        @AuthenticationPrincipal LoginUser user)
             throws IOException {
@@ -48,6 +50,16 @@ public class ReviewController {
 
         Page<ResponseReview> responseReviews = service.getByMyReview(user.id(), page);
         return ResponseEntity.ok(responseReviews);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Long> updateReview(@PathVariable Long id,
+                                             @Valid @RequestPart(value = "request") UpdateReview updateReview,
+                                             @RequestPart(required = false) List<MultipartFile> files)
+            throws IOException {
+
+        ShopReviewEntity entity = service.update(updateReview, files, id);
+        return ResponseEntity.ok(entity.getId());
     }
 
 }

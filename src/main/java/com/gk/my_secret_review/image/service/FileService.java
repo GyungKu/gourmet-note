@@ -48,6 +48,17 @@ public class FileService {
         return entityListToResponseList(images);
     }
 
+    public void deleteImages(List<Long> ids) {
+        if (ids == null) return;
+        List<ReviewImageEntity> deleteImages = reviewImageRepository.findAllById(ids);
+        if (deleteImages == null) return;
+        reviewImageRepository.deleteAllByIdInBatch(ids);
+        deleteImages.forEach(i -> {
+            File file = new File(getDirPath(i.getSaveName()));
+            if (file.exists()) file.delete();
+        });
+    }
+
     private ReviewImageEntity uploadAndGetEntity(MultipartFile file, Long reviewId) throws IOException {
         String originFileName = file.getOriginalFilename();
         String saveFileName = createSaveName(originFileName);
@@ -83,5 +94,4 @@ public class FileService {
                 .map(ResponseImage::fromEntity)
                 .toList();
     }
-
 }

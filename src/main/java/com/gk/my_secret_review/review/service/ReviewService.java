@@ -1,21 +1,20 @@
 package com.gk.my_secret_review.review.service;
 
+import com.gk.my_secret_review.common.exception.GlobalException;
 import com.gk.my_secret_review.image.service.FileService;
 import com.gk.my_secret_review.image.vo.ResponseImage;
 import com.gk.my_secret_review.review.entity.ItemReviewEntity;
 import com.gk.my_secret_review.review.entity.ShopReviewEntity;
 import com.gk.my_secret_review.review.repository.ItemReviewRepository;
 import com.gk.my_secret_review.review.repository.ShopReviewRepository;
-import com.gk.my_secret_review.review.vo.RequestItemReview;
-import com.gk.my_secret_review.review.vo.RequestReview;
-import com.gk.my_secret_review.review.vo.ResponseItemReview;
-import com.gk.my_secret_review.review.vo.ResponseReview;
+import com.gk.my_secret_review.review.vo.*;
 import com.gk.my_secret_review.shop.entity.ShopEntity;
 import com.gk.my_secret_review.shop.service.ShopService;
 import com.gk.my_secret_review.shop.vo.ResponseShop;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -40,7 +39,7 @@ public class ReviewService {
     public ShopReviewEntity create(RequestReview request, Long userId, List<MultipartFile> files) throws IOException {
         ShopEntity shopEntity = shopService.create(request.shop()); // shop 저장 또는 꺼내와서 반환
 
-        validReview(request);
+        validRequest(request);
 
         ShopReviewEntity shopReview = shopReviewRepository.save(ShopReviewEntity.builder()
                 .score(request.score() == null ? 0 : request.score())
@@ -71,6 +70,7 @@ public class ReviewService {
                 .score(shopReviewEntity.getScore())
                 .shop(shop)
                 .items(getResponseItemReviewFromEntities(items)) // 존재하면 List, 없으면 null
+                .images(fileService.getImages(List.of(shopReviewId)))
                 .build();
     }
 
@@ -82,31 +82,56 @@ public class ReviewService {
         List<ItemReviewEntity> itemReviewEntityList = getItemReviewEntities(getReviewIds(myReviews.getContent()));
         Map<Long, List<ItemReviewEntity>> itemsMap = getItemReviewGroupByShopReviewId(itemReviewEntityList);
 
-        return getResponsePageFromEntities(myReviews, itemsMap);
+        return getResponsePageFromEntities(myReviews, itemsMap == null ? null : itemsMap);
+    }
+
+    public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId) throws IOException {
+        ShopReviewEntity entity = ShopReviewGetById(reviewId);
+        entity.update(update.reviews(), update.score());
+        fileService.uploadImage(files, reviewId);
+        fileService.deleteImages(update.deleteImages());
+
+        List<Long> deleteItems = updateItemAndDeleteIds(reviewId, update.items());
+        if (!deleteItems.isEmpty()) itemReviewRepository.deleteAllByIdInBatch(deleteItems);
+        return entity;
     }
 
     /**
      * 내부 메소드
      */
 
-    private void validReview(RequestReview request) {
-        if (!StringUtils.hasText(request.reviews()) && request.score() == null && request.items().size() == 0) {
-            throw new RuntimeException("리뷰 내용 또는 점수 또는 메뉴중 하나는 있어야합니다.");
-        }
+    private void validRequest(RequestReview request) {
+        // 내용, 점수, 메뉴 중 하나는 필수
+        if (!StringUtils.hasText(request.reviews()) && request.score() == null && itemsIsNullOrEmpty(request.items()))
+            throw new GlobalException("내용, 점수, 메뉴 중 하나는 필수 입력해야 합니다.", HttpStatus.BAD_REQUEST);
+
+        // 메뉴가 존재한다면, 메뉴는 필수, 내용이나 점수 중 하나는 필수 입력
+        if (itemsIsNullOrEmpty(request.items()))
+            request.items().forEach(i -> validRequestItem(i));
+    }
+
+    private Boolean itemsIsNullOrEmpty(List<RequestItemReview> items) {
+        if (items == null || items.isEmpty())
+            return true;
+        return false;
+    }
+
+    private void validRequestItem(RequestItemReview item) {
+        if (!StringUtils.hasText(item.title()))
+            throw new GlobalException("메뉴의 상품명은 필수 입력입니다.", HttpStatus.BAD_REQUEST);
+        if (!StringUtils.hasText(item.reviews()) && item.score() == null)
+            throw new GlobalException("메뉴의 리뷰 또는 점수는 필수 입력입니다.", HttpStatus.BAD_REQUEST);
     }
 
     private List<ItemReviewEntity> saveAllItemReview(List<RequestItemReview> items, Long shopReviewId) {
         if (items == null) return null; // 메뉴가 존재하지 않으면 null
         return itemReviewRepository.saveAll(items
                 .stream()
-                .filter(i -> StringUtils.hasText(i.title()) // 메뉴의 이름이 존재하면서, 리뷰내용 또는 평점이 존재하는 것만 필터
-                        && (StringUtils.hasText(i.reviews()) // 따로 예외로 처리하지 않고 걸러내서 저장함(프론트에서 1차로 거름)
-                        || i.score() != null)) //유연하게 하고 싶었음
                 .map(i -> ItemReviewEntity
                         .builder()
                         .title(i.title())
-                        .score(i.score() < 0 || i.score() > 10 ? 0 : i.score()) // 평점이 0~10사이가 아니면 예외 반환 안하고 0
-                        .reviews(i.reviews() == null ? "" : i.reviews()) // 리뷰 내용이 없으면 공백 저장
+                        .score(i.score())
+                        .reviews(i.reviews())
                         .shopReviewId(shopReviewId)
                         .build())
                 .toList()
@@ -117,7 +142,7 @@ public class ReviewService {
     private ShopReviewEntity ShopReviewGetById(Long shopReviewId) {
         return shopReviewRepository.findById(shopReviewId)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("존재하지 않는 리뷰");
+                    throw new GlobalException("존재하지 않는 리뷰", HttpStatus.NOT_FOUND);
                 });
     }
 
@@ -129,8 +154,11 @@ public class ReviewService {
 
 
     private Page<ShopReviewEntity> getPagesByUserIdAndPage(Long userId, Integer page) {
-        return shopReviewRepository.findAllByUserId(userId,
+        Page<ShopReviewEntity> response = shopReviewRepository.findAllByUserId(userId,
                 PageRequest.of(page - 1, 6));
+        if (response.getContent().isEmpty())
+            throw new GlobalException("존재하는 리뷰가 없습니다", HttpStatus.NOT_FOUND);
+        return response;
     }
 
     private List<Long> getReviewIds(List<ShopReviewEntity> entities) {
@@ -164,8 +192,43 @@ public class ReviewService {
                         .shop(ResponseShop.fromEntity(r.getShop()))
                         .score(r.getScore())
                         .images(fileService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
-                        .items(getResponseItemReviewFromEntities(itemsMap.get(r.getId()))) // 존재하면 List, 없으면 null
+                        .items(getResponseItemReviewFromEntities(itemsMap == null ? null : itemsMap.get(r.getId())))
                         .build()
         );
+    }
+
+    private List<Long> updateItemAndDeleteIds(Long reviewId, List<UpdateItemReview> updateList) {
+        Map<Long, UpdateItemReview> updateItemMap = updateList.stream()
+                .collect(Collectors
+                        .toMap(UpdateItemReview::id, u -> u));
+        List<ItemReviewEntity> items = getItemReviewEntities(List.of(reviewId));
+
+        List<Long> deleteItems = new ArrayList<>();
+        if (items != null) {
+            items.forEach(i -> {
+                UpdateItemReview updateItem = updateItemMap.get(i.getId());
+                if (updateItem == null) deleteItems.add(i.getId()); // items에 있는 아이디가 update에 없다면 삭제할 id 리스트에 추가
+                else { // 있다면 수정하고 map 에서 remove
+                    i.update(updateItem.title(), updateItem.reviews(), updateItem.score());
+                    updateItemMap.remove(i.getId());
+                }
+            });
+        }
+
+        // map 에 남아있는 것은, 새로 추가된 것이기에 저장
+        itemReviewRepository.saveAll(updateItemMap
+                .values()
+                .stream()
+                .map(u ->
+                        ItemReviewEntity.builder()
+                                .shopReviewId(reviewId)
+                                .title(u.title())
+                                .reviews(u.reviews())
+                                .score(u.score())
+                                .build()
+                ).toList()
+        );
+
+        return deleteItems;
     }
 }
