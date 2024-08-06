@@ -36,4 +36,8 @@ public class UserEntity {
         this.username = username;
         this.role = role;
     }
+
+    public void update(String username) {
+        this.username = username;
+    }
 }
