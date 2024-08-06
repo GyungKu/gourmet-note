@@ -1,5 +1,6 @@
 package com.gk.my_secret_review.image.entity;
 
+import com.gk.my_secret_review.common.entity.BaseEntity;
 import com.gk.my_secret_review.review.entity.ShopReviewEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "reviewImage")
-public class ReviewImageEntity {
+public class ReviewImageEntity extends BaseEntity {
 
     @Id
     @GeneratedValue

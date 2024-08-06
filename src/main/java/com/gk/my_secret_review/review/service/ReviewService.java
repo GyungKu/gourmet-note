@@ -70,6 +70,7 @@ public class ReviewService {
                 .reviews(shopReviewEntity.getReviews())
                 .rating(shopReviewEntity.getRating())
                 .shop(shop)
+                .createdAt(shopReviewEntity.getCreatedAt())
                 .items(getResponseItemReviewFromEntities(items)) // 존재하면 List, 없으면 null
                 .images(fileService.getImages(List.of(shopReviewId)))
                 .build();
@@ -201,6 +202,7 @@ public class ReviewService {
                         .reviews(r.getReviews())
                         .shop(ResponseShop.fromEntity(r.getShop()))
                         .rating(r.getRating())
+                        .createdAt(r.getCreatedAt())
                         .images(fileService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
                         .items(getResponseItemReviewFromEntities(itemsMap == null ? null : itemsMap.get(r.getId())))
                         .build()
