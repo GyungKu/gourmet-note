@@ -1,37 +1,3 @@
-<template>
-  <body :class="{ dark: isDark }">
-    <Header @toggle-dark-mode="toggleDarkMode" v-if="route.name !== 'naverLogin'" />
-    <div class="main-content">
-      <RouterView />
-      <a href="https://front.codes/" class="logo" target="_blank">
-        <img src="@/assets/image/logo.png" alt="" />
-      </a>
-    </div>
-  </body>
-</template>
-
-<script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import Header from './components/Header.vue';
-import { RouterView, useRoute } from 'vue-router';
-
-const route = useRoute();
-const isDark = ref<boolean>(false);
-
-const toggleDarkMode = () => {
-  isDark.value = !isDark.value;
-  localStorage.setItem('darkMode', JSON.stringify(isDark.value));
-};
-
-onMounted(() => {
-  const darkMode = localStorage.getItem('darkMode');
-  if (darkMode !== null) {
-    isDark.value = JSON.parse(darkMode);
-  }
-});
-</script>
-
-<style>
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext');
 
 /* #Primary
@@ -88,7 +54,7 @@ body {
   height: 28px;
   width: auto;
   display: block;
-  /* filter: brightness(10%); */
+  filter: brightness(10%);
   -webkit-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
 }
@@ -240,4 +206,165 @@ body.dark .nav-item.active .nav-link {
 body.dark .logo img {
   filter: brightness(100%);
 }
-</style>
+
+.start-header.scroll-on {
+  box-shadow: 0 5px 10px 0 rgba(138, 155, 165, 0.15);
+  padding: 10px 0;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.start-header.scroll-on .navbar-brand img {
+  height: 24px;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.section {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+.full-height {
+  height: 100vh;
+}
+.over-hide {
+  overflow: hidden;
+}
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  margin-top: 40px;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+h1 {
+  font-size: 48px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #212112;
+  text-align: center;
+}
+p {
+  text-align: center;
+  margin: 0;
+  padding-top: 10px;
+  opacity: 1;
+  transform: translate(0);
+  transition: all 300ms linear;
+  transition-delay: 1700ms;
+}
+body.hero-anime p {
+  opacity: 0;
+  transform: translateY(40px);
+  transition-delay: 1700ms;
+}
+body.hero-anime h1 span:nth-child(1) {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+body.hero-anime h1 span:nth-child(2) {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+body.hero-anime h1 span:nth-child(3) {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+body.hero-anime h1 span:nth-child(4) {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+body.hero-anime h1 span:nth-child(5) {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+body.hero-anime h1 span:nth-child(6) {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+body.hero-anime h1 span:nth-child(7) {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+body.hero-anime h1 span:nth-child(8) {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+body.hero-anime h1 span:nth-child(9) {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+body.hero-anime h1 span:nth-child(10) {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+h1 span:nth-child(1) {
+  transition-delay: 1000ms;
+}
+h1 span:nth-child(2) {
+  transition-delay: 700ms;
+}
+h1 span:nth-child(3) {
+  transition-delay: 900ms;
+}
+h1 span:nth-child(4) {
+  transition-delay: 800ms;
+}
+h1 span:nth-child(5) {
+  transition-delay: 1000ms;
+}
+h1 span:nth-child(6) {
+  transition-delay: 700ms;
+}
+h1 span:nth-child(7) {
+  transition-delay: 900ms;
+}
+h1 span:nth-child(8) {
+  transition-delay: 800ms;
+}
+h1 span:nth-child(9) {
+  transition-delay: 600ms;
+}
+h1 span:nth-child(10) {
+  transition-delay: 700ms;
+}
+body.hero-anime h1 span:nth-child(11) {
+  opacity: 0;
+  transform: translateY(30px);
+}
+body.hero-anime h1 span:nth-child(12) {
+  opacity: 0;
+  transform: translateY(50px);
+}
+body.hero-anime h1 span:nth-child(13) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+body.hero-anime h1 span:nth-child(14) {
+  opacity: 0;
+  transform: translateY(30px);
+}
+body.hero-anime h1 span:nth-child(15) {
+  opacity: 0;
+  transform: translateY(50px);
+}
+h1 span:nth-child(11) {
+  transition-delay: 1300ms;
+}
+h1 span:nth-child(12) {
+  transition-delay: 1500ms;
+}
+h1 span:nth-child(13) {
+  transition-delay: 1400ms;
+}
+h1 span:nth-child(14) {
+  transition-delay: 1200ms;
+}
+h1 span:nth-child(15) {
+  transition-delay: 1450ms;
+}
+
+body.dark p {
+  transition-delay: 0ms !important;
+}
