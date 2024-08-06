@@ -2,7 +2,6 @@ package com.gk.my_secret_review.review.service;
 
 import com.gk.my_secret_review.common.exception.GlobalException;
 import com.gk.my_secret_review.image.service.FileService;
-import com.gk.my_secret_review.image.vo.ResponseImage;
 import com.gk.my_secret_review.review.entity.ItemReviewEntity;
 import com.gk.my_secret_review.review.entity.ShopReviewEntity;
 import com.gk.my_secret_review.review.repository.ItemReviewRepository;
@@ -42,7 +41,7 @@ public class ReviewService {
         validRequest(request);
 
         ShopReviewEntity shopReview = shopReviewRepository.save(ShopReviewEntity.builder()
-                .score(request.score() == null ? 0 : request.score())
+                .rating(request.rating() == null ? 0 : request.rating())
                 .reviews(request.reviews())
                 .shopId(shopEntity.getId())
                 .userId(userId)
@@ -53,8 +52,10 @@ public class ReviewService {
     }
 
 
-    public ResponseReview getReviewById(Long shopReviewId) {
+    public ResponseReview getReviewById(Long shopReviewId, Long userId) {
         ShopReviewEntity shopReviewEntity = ShopReviewGetById(shopReviewId);
+
+        verifyResourceOwner(userId, shopReviewEntity.getUserId());
 
         ResponseShop shop = ResponseShop.builder()
                 .title(shopReviewEntity.getShop().getTitle())
@@ -67,7 +68,7 @@ public class ReviewService {
         return ResponseReview.builder()
                 .id(shopReviewEntity.getId())
                 .reviews(shopReviewEntity.getReviews())
-                .score(shopReviewEntity.getScore())
+                .rating(shopReviewEntity.getRating())
                 .shop(shop)
                 .items(getResponseItemReviewFromEntities(items)) // 존재하면 List, 없으면 null
                 .images(fileService.getImages(List.of(shopReviewId)))
@@ -87,7 +88,7 @@ public class ReviewService {
 
     public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId) throws IOException {
         ShopReviewEntity entity = ShopReviewGetById(reviewId);
-        entity.update(update.reviews(), update.score());
+        entity.update(update.reviews(), update.rating());
         fileService.uploadImage(files, reviewId);
         fileService.deleteImages(update.deleteImages());
 
@@ -96,13 +97,17 @@ public class ReviewService {
         return entity;
     }
 
+    public Long getReviewCountByUserId(Long userId) {
+        return shopReviewRepository.countByUserId(userId);
+    }
+
     /**
      * 내부 메소드
      */
 
     private void validRequest(RequestReview request) {
         // 내용, 점수, 메뉴 중 하나는 필수
-        if (!StringUtils.hasText(request.reviews()) && request.score() == null && itemsIsNullOrEmpty(request.items()))
+        if (!StringUtils.hasText(request.reviews()) && request.rating() == null && itemsIsNullOrEmpty(request.items()))
             throw new GlobalException("내용, 점수, 메뉴 중 하나는 필수 입력해야 합니다.", HttpStatus.BAD_REQUEST);
 
         // 메뉴가 존재한다면, 메뉴는 필수, 내용이나 점수 중 하나는 필수 입력
@@ -119,7 +124,7 @@ public class ReviewService {
     private void validRequestItem(RequestItemReview item) {
         if (!StringUtils.hasText(item.title()))
             throw new GlobalException("메뉴의 상품명은 필수 입력입니다.", HttpStatus.BAD_REQUEST);
-        if (!StringUtils.hasText(item.reviews()) && item.score() == null)
+        if (!StringUtils.hasText(item.reviews()) && item.rating() == null)
             throw new GlobalException("메뉴의 리뷰 또는 점수는 필수 입력입니다.", HttpStatus.BAD_REQUEST);
     }
 
@@ -130,7 +135,7 @@ public class ReviewService {
                 .map(i -> ItemReviewEntity
                         .builder()
                         .title(i.title())
-                        .score(i.score())
+                        .rating(i.rating())
                         .reviews(i.reviews())
                         .shopReviewId(shopReviewId)
                         .build())
@@ -144,6 +149,11 @@ public class ReviewService {
                 .orElseThrow(() -> {
                     throw new GlobalException("존재하지 않는 리뷰", HttpStatus.NOT_FOUND);
                 });
+    }
+
+    private void verifyResourceOwner(Long reviewOwnerId, Long userId) {
+        if (reviewOwnerId != userId)
+            throw new GlobalException("본인의 리뷰가 아닙니다.", HttpStatus.FORBIDDEN);
     }
 
 
@@ -190,7 +200,7 @@ public class ReviewService {
                         .id(r.getId())
                         .reviews(r.getReviews())
                         .shop(ResponseShop.fromEntity(r.getShop()))
-                        .score(r.getScore())
+                        .rating(r.getRating())
                         .images(fileService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
                         .items(getResponseItemReviewFromEntities(itemsMap == null ? null : itemsMap.get(r.getId())))
                         .build()
@@ -209,7 +219,7 @@ public class ReviewService {
                 UpdateItemReview updateItem = updateItemMap.get(i.getId());
                 if (updateItem == null) deleteItems.add(i.getId()); // items에 있는 아이디가 update에 없다면 삭제할 id 리스트에 추가
                 else { // 있다면 수정하고 map 에서 remove
-                    i.update(updateItem.title(), updateItem.reviews(), updateItem.score());
+                    i.update(updateItem.title(), updateItem.reviews(), updateItem.rating());
                     updateItemMap.remove(i.getId());
                 }
             });
@@ -224,7 +234,7 @@ public class ReviewService {
                                 .shopReviewId(reviewId)
                                 .title(u.title())
                                 .reviews(u.reviews())
-                                .score(u.score())
+                                .rating(u.rating())
                                 .build()
                 ).toList()
         );

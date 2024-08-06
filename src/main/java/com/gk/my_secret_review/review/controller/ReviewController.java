@@ -8,7 +8,6 @@ import com.gk.my_secret_review.review.vo.UpdateReview;
 import com.gk.my_secret_review.user.vo.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +38,10 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseReview> getReviewById(@PathVariable Long id) {
-        ResponseReview responseReview = service.getReviewById(id);
+    public ResponseEntity<ResponseReview> getReviewById(@PathVariable Long id,
+                                                        @AuthenticationPrincipal LoginUser user) {
+
+        ResponseReview responseReview = service.getReviewById(id, user.id());
         return ResponseEntity.ok(responseReview);
     }
 

@@ -1,6 +1,5 @@
 package com.gk.my_secret_review.review.entity;
 
-import com.gk.my_secret_review.shop.entity.ShopEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class ItemReviewEntity {
     private Long id;
 
     private String title;
-    private Float score;
+    private Float rating;
     private String reviews;
     private Long shopReviewId;
 
@@ -27,9 +26,9 @@ public class ItemReviewEntity {
     private ShopReviewEntity shopReview;
 
     @Builder
-    public ItemReviewEntity(String title, Float score, String reviews, Long shopReviewId) {
+    public ItemReviewEntity(String title, Float rating, String reviews, Long shopReviewId) {
         this.title = title;
-        this.score = score;
+        this.rating = rating;
         this.reviews = reviews;
         this.shopReviewId = shopReviewId;
     }
@@ -37,6 +36,6 @@ public class ItemReviewEntity {
     public void update(String title, String reviews, Float score) {
         this.title = title;
         this.reviews = reviews;
-        this.score = score;
+        this.rating = score;
     }
 }

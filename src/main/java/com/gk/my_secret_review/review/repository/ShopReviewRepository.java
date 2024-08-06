@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ShopReviewRepository extends JpaRepository<ShopReviewEntity, Long> {
     @EntityGraph(attributePaths = "shop")
     Page<ShopReviewEntity> findAllByUserId(Long userId, Pageable pageable);
+
+    Long countByUserId(Long userId);
 }

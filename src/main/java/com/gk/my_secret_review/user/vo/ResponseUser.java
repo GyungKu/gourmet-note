@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ResponseUser(
-        String username
+        String username,
+        Long reviewCount
 ) {
 }

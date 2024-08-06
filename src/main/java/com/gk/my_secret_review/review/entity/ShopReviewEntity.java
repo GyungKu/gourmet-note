@@ -16,7 +16,7 @@ public class ShopReviewEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private Float score;
+    private Float rating;
     private String reviews;
     private Long shopId;
     private Long userId;
@@ -32,8 +32,8 @@ public class ShopReviewEntity {
     private UserEntity user;
 
     @Builder
-    public ShopReviewEntity(Float score, String reviews, Long shopId, Long userId) {
-        this.score = score;
+    public ShopReviewEntity(Float rating, String reviews, Long shopId, Long userId) {
+        this.rating = rating;
         this.reviews = reviews;
         this.shopId = shopId;
         this.userId = userId;
@@ -41,6 +41,6 @@ public class ShopReviewEntity {
 
     public void update(String reviews, Float score) {
         this.reviews = reviews;
-        this.score = score;
+        this.rating = score;
     }
 }

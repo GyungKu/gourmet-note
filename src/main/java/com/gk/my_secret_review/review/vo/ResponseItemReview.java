@@ -7,7 +7,7 @@ import lombok.Builder;
 public record ResponseItemReview(
         Long id,
         String title,
-        Float score,
+        Float rating,
         String reviews
 ) {
 
@@ -15,7 +15,7 @@ public record ResponseItemReview(
 //        if (entity == null) return null;
         return ResponseItemReview.builder()
                 .title(entity.getTitle())
-                .score(entity.getScore())
+                .rating(entity.getRating())
                 .reviews(entity.getReviews())
                 .id(entity.getId())
                 .build();

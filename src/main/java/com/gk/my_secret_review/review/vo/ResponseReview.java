@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public record ResponseReview(
         Long id,
-        Float score,
+        Float rating,
         String reviews,
         ResponseShop shop,
         List<ResponseItemReview> items,
