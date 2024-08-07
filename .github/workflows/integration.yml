@@ -20,9 +20,9 @@ jobs:
       - name: create .env
         working-directory: ./front
         run: |
-          echo "VITE_BASE_URL=$VITE_BASE_URL" >> env.production
-          echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> env.production
-          echo "VITE_NAVER_CLIENT_ID=$VITE_NAVER_CLIENT_ID" >> env.production
+          echo "VITE_BASE_URL=$VITE_BASE_URL" >> .env.production
+          echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> .env.production
+          echo "VITE_NAVER_CLIENT_ID=$VITE_NAVER_CLIENT_ID" >> .env.production
         env:
           VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
           VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
