@@ -21,7 +21,7 @@
             /> -->
             <div class="review-info">
               <h5>작성일: {{ formatDate(review.createdAt) }}</h5>
-              <small>평점: {{ review.raing ? review.raing : 'x' }}</small>
+              <small>평점: {{ review.rating ? review.rating : 'x' }}</small>
             </div>
           </div>
         </div>

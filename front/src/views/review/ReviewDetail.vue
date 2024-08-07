@@ -48,7 +48,7 @@
             <p class="card-text">
               {{ review.reviews ? review.reviews : '리뷰 내용이 없습니다.' }}
             </p>
-            <small>평점: {{ review.raing ? review.raing : 'x' }}</small>
+            <small>평점: {{ review.rating ? review.rating : 'x' }}</small>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
               </p>
             </div>
             <div class="card-footer">
-              <small>평점: {{ item.raing ? item.raing : 'x' }}</small>
+              <small>평점: {{ item.rating ? item.rating : 'x' }}</small>
             </div>
           </div>
         </div>

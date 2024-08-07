@@ -15,8 +15,8 @@
           ></textarea>
         </div>
         <div class="mb-3">
-          <label class="form-label" for="raing">점수</label>
-          <input type="text" class="form-control px-4" v-model="review.raing" id="raing" />
+          <label class="form-label" for="rating">점수</label>
+          <input type="text" class="form-control px-4" v-model="review.rating" id="rating" />
         </div>
       </ul>
     </div>
@@ -39,7 +39,7 @@
         <input
           type="text"
           class="form-control px-4"
-          v-model="item.raing"
+          v-model="item.rating"
           placeholder="점수를 적어주세요"
         />
         <button class="btn btn-primary" @click="removeItem(idx)">메뉴제거</button>
@@ -152,7 +152,6 @@ const reviewPost = () => {
     })
     .catch((err) => {
       alert('리뷰등록 실패');
-      console.log(err.response.data);
     });
 };
 
@@ -177,26 +176,26 @@ const validForm = () => {
   if (
     items.value.length === 0 &&
     !review.value.reviews &&
-    !review.value.raing &&
-    review.value.raing !== 0
+    !review.value.rating &&
+    review.value.rating !== 0
   ) {
     alert('메뉴가 없으면 가게의 리뷰 내용 또는 점수는 필수입니다.');
     return;
   }
 
-  const reviewraing = review.value.raing;
-  if (reviewraing && (reviewraing < 0.0 || reviewraing > 10.0)) {
+  const reviewrating = review.value.rating;
+  if (reviewrating && (reviewrating < 0.0 || reviewrating > 10.0)) {
     alert('점수는 0~10 사이 입니다.');
     return;
   }
 
   items.value.forEach((i) => {
-    if (!i.title || (!i.reviews && !i.raing)) {
+    if (!i.title || (!i.reviews && !i.rating)) {
       alert('메뉴이름과 리뷰 또는 점수를 적어주시거나 메뉴를 제거해 주세요');
       return;
     }
 
-    if (i.raing && (i.raing < 0.0 || i.raing > 10.0)) {
+    if (i.rating && (i.rating < 0.0 || i.rating > 10.0)) {
       alert('점수는 0~10 사이 입니다.');
       return;
     }

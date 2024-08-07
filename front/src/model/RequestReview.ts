@@ -4,7 +4,7 @@ import type { RequestShop } from './RequestShop';
 export interface RequestReview {
   shop: RequestShop;
   reviews?: string;
-  raing?: number;
+  rating?: number;
   items?: RequestItem[];
   deleteImages?: number[];
 }

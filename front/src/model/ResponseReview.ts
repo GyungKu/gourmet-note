@@ -4,7 +4,7 @@ import type { Shop } from './Shop';
 
 export interface ResponseReview {
   id: number;
-  raing?: number;
+  rating?: number;
   reviews?: string;
   shop: Shop;
   items?: ResponseItemReview[];

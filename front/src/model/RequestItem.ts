@@ -1,5 +1,5 @@
 export interface RequestItem {
   title: string;
-  raing?: number;
+  rating?: number;
   reviews?: string;
 }
