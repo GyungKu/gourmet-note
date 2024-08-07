@@ -49,6 +49,11 @@
               {{ review.reviews ? review.reviews : '리뷰 내용이 없습니다.' }}
             </p>
             <small>평점: {{ review.rating ? review.rating : 'x' }}</small>
+            <div>
+              <button>
+                <router-link :to="{ name: 'editReview', id: review.id }">리뷰수정</router-link>
+              </button>
+            </div>
           </div>
         </div>
       </div>
