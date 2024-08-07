@@ -3,8 +3,6 @@ import Login from '@/views/login/Login.vue';
 import NaverLogin from '@/views/login/NaverLogin.vue';
 import MyPage from '@/views/my/MyPage.vue';
 import MyReview from '@/views/my/MyReview.vue';
-import OnlyTest from '@/views/OnlyTest.vue';
-import OnlyTest2 from '@/views/OnlyTest2.vue';
 import ReviewDetail from '@/views/review/ReviewDetail.vue';
 import ReviewForm from '@/views/review/ReviewForm.vue';
 import SearchShop from '@/views/review/SearchShop.vue';
@@ -14,8 +12,6 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { name: 'home', path: '/', component: Home },
-    { name: 'test', path: '/test', component: OnlyTest },
-    { name: 'test2', path: '/test2', component: OnlyTest2 },
     { name: 'login', path: '/login', component: Login, meta: { requiresAuth: false } },
     {
       name: 'naverLogin',
