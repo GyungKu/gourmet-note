@@ -3,7 +3,7 @@
     <Header @toggle-dark-mode="toggleDarkMode" v-if="route.name !== 'naverLogin'" />
     <div class="main-content">
       <RouterView />
-      <a href="https://front.codes/" class="logo" target="_blank">
+      <a class="logo" target="_blank">
         <img src="@/assets/image/logo.png" alt="" />
       </a>
     </div>
