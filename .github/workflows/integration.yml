@@ -1,6 +1,6 @@
 name: Deploy Backend
 on:
-  pull_request:
+  push:
     branches:
       - main
 # 프론트 빌드 환경설정 넣어서 빌드 -> 백엔드 빌드
