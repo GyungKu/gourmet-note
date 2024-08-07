@@ -1,16 +1,24 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#      settings:
+#        web-allow-others: true
+#
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    username: sa
 
+#   postgresql
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
+    url: jdbc:postgresql:${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
 
   jpa:
+    hibernate:
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -18,8 +26,22 @@ spring:
         highlight_sql: true
 
 admin:
-  verify_code: adminSignupCode
+  verify_code: ${ADMIN_VERIFY_CODE}
 
 naver:
-  client_id: k249sBMq5r9cVE7DY_W3
-  secret: tQ3QKOiA2h
+  client_id: ${NAVER_CLIENT_ID}
+  secret: ${NAVER_CLIENT_SECRET}
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        max-age: 31536000
+
+upload:
+  image:
+    dir: ${UPLOAD_IMAGE_DIR}
+    path: ${UPLOAD_IMAGE_PATH=/upload/get/files/}
+baseurl: ${BASE_URL}
