@@ -10,9 +10,9 @@ spring:
 #    url: jdbc:h2:mem:testdb
 #    username: sa
 
-#   postgresql
+#  postgresql
   datasource:
-    url: jdbc:postgresql:${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}
     username: ${POSTGRESQL_USERNAME}
     password: ${POSTGRESQL_PASSWORD}
 
