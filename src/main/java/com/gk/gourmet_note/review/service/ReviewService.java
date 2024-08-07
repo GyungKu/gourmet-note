@@ -1,7 +1,7 @@
 package com.gk.gourmet_note.review.service;
 
 import com.gk.gourmet_note.common.exception.GlobalException;
-import com.gk.gourmet_note.image.service.FileService;
+import com.gk.gourmet_note.image.service.ImageService;
 import com.gk.gourmet_note.review.entity.ItemReviewEntity;
 import com.gk.gourmet_note.review.entity.ShopReviewEntity;
 import com.gk.gourmet_note.review.repository.ItemReviewRepository;
@@ -33,7 +33,7 @@ public class ReviewService {
     private final ShopReviewRepository shopReviewRepository;
     private final ItemReviewRepository itemReviewRepository;
     private final ShopService shopService;
-    private final FileService fileService;
+    private final ImageService imageService;
 
     public ShopReviewEntity create(RequestReview request, Long userId, List<MultipartFile> files) throws IOException {
         ShopEntity shopEntity = shopService.create(request.shop()); // shop 저장 또는 꺼내와서 반환
@@ -47,7 +47,7 @@ public class ReviewService {
                 .userId(userId)
                 .build());
         saveAllItemReview(request.items(), shopReview.getId());
-        fileService.uploadImage(files, shopReview.getId());
+        imageService.uploadImages(files, shopReview.getId());
         return shopReview;
     }
 
@@ -72,7 +72,7 @@ public class ReviewService {
                 .shop(shop)
                 .createdAt(shopReviewEntity.getCreatedAt())
                 .items(getResponseItemReviewFromEntities(items)) // 존재하면 List, 없으면 null
-                .images(fileService.getImages(List.of(shopReviewId)))
+                .images(imageService.getImages(List.of(shopReviewId)))
                 .build();
     }
 
@@ -90,8 +90,8 @@ public class ReviewService {
     public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId) throws IOException {
         ShopReviewEntity entity = ShopReviewGetById(reviewId);
         entity.update(update.reviews(), update.rating());
-        fileService.uploadImage(files, reviewId);
-        fileService.deleteImages(update.deleteImages());
+        imageService.uploadImages(files, reviewId);
+        imageService.deleteImages(update.deleteImages());
 
         List<Long> deleteItems = updateItemAndDeleteIds(reviewId, update.items());
         if (!deleteItems.isEmpty()) itemReviewRepository.deleteAllByIdInBatch(deleteItems);
@@ -203,7 +203,7 @@ public class ReviewService {
                         .shop(ResponseShop.fromEntity(r.getShop()))
                         .rating(r.getRating())
                         .createdAt(r.getCreatedAt())
-                        .images(fileService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
+                        .images(imageService.getImages(List.of(r.getId()))) // 존재하면 List, 없으면 null
                         .items(getResponseItemReviewFromEntities(itemsMap == null ? null : itemsMap.get(r.getId())))
                         .build()
         );

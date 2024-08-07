@@ -1,11 +1,12 @@
 package com.gk.gourmet_note.image.service;
 
+import com.gk.gourmet_note.common.exception.GlobalException;
 import com.gk.gourmet_note.image.entity.ReviewImageEntity;
 import com.gk.gourmet_note.image.repository.ReviewImageRepository;
 import com.gk.gourmet_note.image.vo.ResponseImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 @Transactional
-public class FileService {
+public class LocalStoreService implements ImageService {
 
     private final ReviewImageRepository reviewImageRepository;
 
@@ -29,8 +30,9 @@ public class FileService {
     @Value("${baseurl}")
     private String url; // 서버의 baseurl
 
-    public List<ResponseImage> uploadImage(List<MultipartFile> multipartFiles, Long reviewId)
-            throws IOException {
+    @Override
+    public List<ResponseImage> uploadImages(List<MultipartFile> multipartFiles, Long reviewId)
+    {
 
         if (multipartFiles == null) return null; // 업로드된 이미지가 없다면 null 반환
 
@@ -42,12 +44,14 @@ public class FileService {
         return entityListToResponseList(saveAllImageEntity(images)); // save 하고 ResponseList 반환
     }
 
+    @Override
     public List<ResponseImage> getImages(List<Long> reviewIds) {
         List<ReviewImageEntity> images = reviewImageRepository.findAllByShopReviewIdIn(reviewIds);
         if (images == null || images.isEmpty()) return null;
         return entityListToResponseList(images);
     }
 
+    @Override
     public void deleteImages(List<Long> ids) {
         if (ids == null) return;
         List<ReviewImageEntity> deleteImages = reviewImageRepository.findAllById(ids);
@@ -59,10 +63,14 @@ public class FileService {
         });
     }
 
-    private ReviewImageEntity uploadAndGetEntity(MultipartFile file, Long reviewId) throws IOException {
+    private ReviewImageEntity uploadAndGetEntity(MultipartFile file, Long reviewId) {
         String originFileName = file.getOriginalFilename();
         String saveFileName = createSaveName(originFileName);
-        file.transferTo(new File(getDirPath(saveFileName)));
+        try {
+            file.transferTo(new File(getDirPath(saveFileName)));
+        } catch (IOException e) {
+            throw new GlobalException("이미지 저장중에 문제가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         return ReviewImageEntity.builder()
                 .uploadName(originFileName)
