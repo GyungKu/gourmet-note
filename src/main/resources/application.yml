@@ -15,7 +15,6 @@ spring:
     url: jdbc:postgresql:${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}
     username: ${POSTGRESQL_USERNAME}
     password: ${POSTGRESQL_PASSWORD}
-    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -25,7 +24,6 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 admin:
   verify_code: ${ADMIN_VERIFY_CODE}

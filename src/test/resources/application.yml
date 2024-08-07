@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:tesdb;MODE=PostgreSQL
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
+admin:
+  verify_code: admin
+
+naver:
+  client_id: client
+  secret: client
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        max-age: 31536000
+
+upload:
+  image:
+    dir: dir
+    path: path
+baseurl: url
