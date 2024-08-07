@@ -6,8 +6,7 @@ on:
 
 # 프론트 빌드 환경설정 넣어서 빌드 -> 백엔드 빌드
 jobs:
-  build-backend:
-    needs: build-front
+  build:
     runs-on: ubuntu-latest
 
     steps:
