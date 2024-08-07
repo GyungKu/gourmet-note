@@ -13,13 +13,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: use node
-        working-directory: ./front
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-        run: npm install
 
       - name: create .env
+        working-directory: ./front
         run: |
           echo "VITE_BASE_URL=$VITE_BASE_URL" >> env.production
           echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> env.production
@@ -31,7 +30,9 @@ jobs:
 
       - name: install to build
         working-directory: ./front
-        run: npm run build
+        run: |
+          npm install &/
+          npm run build
 
       #자바 17 설치
       - name: Set up JDK 17
