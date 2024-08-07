@@ -103,7 +103,7 @@ const clickPage = (page: number) => {
   fetchReview();
 };
 
-const formatDate = (createdAt) => {
+const formatDate = (createdAt: string) => {
   const date = new Date(createdAt);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

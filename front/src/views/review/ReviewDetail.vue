@@ -80,7 +80,7 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const review = ref<ResponseReview>({ shop: { title: '', address: '' }, id: 0 });
+const review = ref<ResponseReview>({ shop: { title: '', address: '' }, id: 0, createdAt: '' });
 const route = useRoute();
 const router = useRouter();
 
