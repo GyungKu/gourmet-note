@@ -12,11 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: use node and create .env
+      - name: use node
         working-directory: ./front
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: create .env
         run: |
           echo "VITE_BASE_URL=$VITE_BASE_URL" >> env.production
           echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> env.production
