@@ -3,26 +3,21 @@ on:
   push:
     branches:
       - main
+
 # 프론트 빌드 환경설정 넣어서 빌드 -> 백엔드 빌드
 jobs:
-  build-front:
+  build-backend:
+    needs: build-front
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./front
 
     steps:
       - uses: actions/checkout@v4
 
-        # node 사용
-      - name: use node
+      - name: use node and create .env
+        working-directory: ./front
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-        # env 파일 생성
-      - name: create .env
         run: |
           echo "VITE_BASE_URL=$VITE_BASE_URL" >> env.production
           echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> env.production
@@ -32,19 +27,11 @@ jobs:
           VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
           VITE_NAVER_CLIENT_ID: ${{ secrets.VITE_NAVER_CLIENT_ID }}
 
-        # npm install, build
       - name: install to build
+        working-directory: ./front
         run: |
           npm install && \
           npm run build
-
-
-  build-backend:
-    needs: build-front
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
 
       #자바 17 설치
       - name: Set up JDK 17
