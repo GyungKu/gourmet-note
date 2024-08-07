@@ -44,5 +44,5 @@ server:
 upload:
   image:
     dir: ${UPLOAD_IMAGE_DIR}
-    path: ${UPLOAD_IMAGE_PATH=/upload/get/files/}
+    path: ${UPLOAD_IMAGE_PATH}
 baseurl: ${BASE_URL}
