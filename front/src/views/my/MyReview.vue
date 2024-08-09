@@ -118,7 +118,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 * {
   box-sizing: border-box;
 }
