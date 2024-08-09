@@ -19,8 +19,8 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(300);
-        factory.setReadTimeout(300);
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(5000);
 
         return RestClient.builder()
                 .requestFactory(factory)
@@ -33,8 +33,8 @@ public class RestClientConfig {
     @Bean
     public PhoneStorageHttpInterface phoneStorageHttpInterface() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(3000);
-        requestFactory.setReadTimeout(3000);
+        requestFactory.setConnectTimeout(5000);
+        requestFactory.setReadTimeout(5000);
 
         String storageBaseUrl = env.getProperty("storage.url");
         RestClient restClient = RestClient.builder()
