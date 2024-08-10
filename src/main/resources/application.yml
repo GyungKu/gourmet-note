@@ -1,3 +1,16 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        max-age: 31536000
+  ssl:
+    key-store: ${KEY_STORE_PATH}
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-alias: ${KEY_STORE_AS}
+
 spring:
 #  h2:
 #    console:
@@ -32,14 +45,6 @@ naver:
   client_id: ${NAVER_CLIENT_ID}
   secret: ${NAVER_CLIENT_SECRET}
 
-server:
-  servlet:
-    session:
-      cookie:
-        http-only: true
-        secure: true
-        max-age: 31536000
-
 upload:
   image:
     dir: ${UPLOAD_IMAGE_DIR}
@@ -49,3 +54,7 @@ baseurl: ${BASE_URL}
 
 storage:
   url: ${STORAGE_URL}
+
+resource:
+  image:
+    path: ${RESOURCE_IMAGE_PATH}
