@@ -18,8 +18,14 @@ public class ShopReviewEntity extends BaseEntity {
     @GeneratedValue
     private Long id;
     private Float rating;
-    private String reviews;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @Column(nullable = false)
     private Long shopId;
+
+    @Column(nullable = false)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,15 +39,15 @@ public class ShopReviewEntity extends BaseEntity {
     private UserEntity user;
 
     @Builder
-    public ShopReviewEntity(Float rating, String reviews, Long shopId, Long userId) {
+    public ShopReviewEntity(Float rating, String content, Long shopId, Long userId) {
         this.rating = rating;
-        this.reviews = reviews;
+        this.content = content;
         this.shopId = shopId;
         this.userId = userId;
     }
 
     public void update(String reviews, Float score) {
-        this.reviews = reviews;
+        this.content = reviews;
         this.rating = score;
     }
 }

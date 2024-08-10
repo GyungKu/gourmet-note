@@ -9,7 +9,7 @@
           <textarea
             type="text"
             class="form-control"
-            v-model="review.reviews"
+            v-model="review.content"
             id="reviews"
             rows="3"
           ></textarea>
@@ -26,13 +26,13 @@
         <input
           type="text"
           class="form-control px-4"
-          v-model="item.title"
+          v-model="item.name"
           placeholder="메뉴를 적어주세요"
         />
         <textarea
           type="text"
           class="form-control"
-          v-model="item.reviews"
+          v-model="item.content"
           placeholder="메뉴에 대한 리뷰 내용을 적어주세요"
           rows="3"
         ></textarea>
@@ -130,7 +130,7 @@ const removeOriginFile = (id: number, idx: number) => {
 };
 
 const addItem = () => {
-  review.value.items?.push({ title: '' });
+  review.value.items?.push({ name: '' });
 };
 
 const removeItem = (idx: number) => {
@@ -175,7 +175,7 @@ const reviewEdit = () => {
 const validForm = () => {
   if (
     items.value.length === 0 &&
-    !review.value.reviews &&
+    !review.value.content &&
     !review.value.rating &&
     review.value.rating !== 0
   ) {
@@ -190,7 +190,7 @@ const validForm = () => {
   }
 
   items.value.forEach((i) => {
-    if (!i.title || (!i.reviews && !i.rating)) {
+    if (!i.name || (!i.content && !i.rating)) {
       alert('메뉴이름과 리뷰 또는 점수를 적어주시거나 메뉴를 제거해 주세요');
       return;
     }

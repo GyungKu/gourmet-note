@@ -1,10 +1,7 @@
 package com.gk.gourmet_note.shop.entity;
 
 import com.gk.gourmet_note.common.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,9 @@ public class ShopEntity extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String address;
     private String link;
 

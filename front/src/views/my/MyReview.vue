@@ -13,7 +13,7 @@
           <router-link :to="{ name: 'reviewDetail', params: { id: review.id } }">
             <h4>{{ review.shop.title }}</h4>
           </router-link>
-          <p>{{ review.reviews ? review.reviews : '리뷰내용이 없습니다.' }}</p>
+          <p>{{ review.content ? review.content : '리뷰내용이 없습니다.' }}</p>
           <div class="review">
             <!-- <img
               src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo"

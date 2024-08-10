@@ -42,7 +42,7 @@ public class ReviewService {
 
         ShopReviewEntity shopReview = shopReviewRepository.save(ShopReviewEntity.builder()
                 .rating(request.rating() == null ? 0 : request.rating())
-                .reviews(request.reviews())
+                .content(request.content())
                 .shopId(shopEntity.getId())
                 .userId(userId)
                 .build());
@@ -67,7 +67,7 @@ public class ReviewService {
 
         return ResponseReview.builder()
                 .id(shopReviewEntity.getId())
-                .reviews(shopReviewEntity.getReviews())
+                .reviews(shopReviewEntity.getContent())
                 .rating(shopReviewEntity.getRating())
                 .shop(shop)
                 .createdAt(shopReviewEntity.getCreatedAt())
@@ -89,7 +89,7 @@ public class ReviewService {
 
     public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId) throws IOException {
         ShopReviewEntity entity = ShopReviewGetById(reviewId);
-        entity.update(update.reviews(), update.rating());
+        entity.update(update.content(), update.rating());
         imageService.uploadImages(files, reviewId);
         imageService.deleteImages(update.deleteImages());
 
@@ -108,7 +108,7 @@ public class ReviewService {
 
     private void validRequest(RequestReview request) {
         // 내용, 점수, 메뉴 중 하나는 필수
-        if (!StringUtils.hasText(request.reviews()) && request.rating() == null && itemsIsNullOrEmpty(request.items()))
+        if (!StringUtils.hasText(request.content()) && request.rating() == null && itemsIsNullOrEmpty(request.items()))
             throw new GlobalException("내용, 점수, 메뉴 중 하나는 필수 입력해야 합니다.", HttpStatus.BAD_REQUEST);
 
         // 메뉴가 존재한다면, 메뉴는 필수, 내용이나 점수 중 하나는 필수 입력
@@ -123,9 +123,9 @@ public class ReviewService {
     }
 
     private void validRequestItem(RequestItemReview item) {
-        if (!StringUtils.hasText(item.title()))
+        if (!StringUtils.hasText(item.name()))
             throw new GlobalException("메뉴의 상품명은 필수 입력입니다.", HttpStatus.BAD_REQUEST);
-        if (!StringUtils.hasText(item.reviews()) && item.rating() == null)
+        if (!StringUtils.hasText(item.content()) && item.rating() == null)
             throw new GlobalException("메뉴의 리뷰 또는 점수는 필수 입력입니다.", HttpStatus.BAD_REQUEST);
     }
 
@@ -135,9 +135,9 @@ public class ReviewService {
                 .stream()
                 .map(i -> ItemReviewEntity
                         .builder()
-                        .title(i.title())
+                        .name(i.name())
                         .rating(i.rating())
-                        .reviews(i.reviews())
+                        .content(i.content())
                         .shopReviewId(shopReviewId)
                         .build())
                 .toList()
@@ -199,7 +199,7 @@ public class ReviewService {
         return entities.map(r ->
                 ResponseReview.builder()
                         .id(r.getId())
-                        .reviews(r.getReviews())
+                        .reviews(r.getContent())
                         .shop(ResponseShop.fromEntity(r.getShop()))
                         .rating(r.getRating())
                         .createdAt(r.getCreatedAt())
@@ -221,7 +221,7 @@ public class ReviewService {
                 UpdateItemReview updateItem = updateItemMap.get(i.getId());
                 if (updateItem == null) deleteItems.add(i.getId()); // items에 있는 아이디가 update에 없다면 삭제할 id 리스트에 추가
                 else { // 있다면 수정하고 map 에서 remove
-                    i.update(updateItem.title(), updateItem.reviews(), updateItem.rating());
+                    i.update(updateItem.name(), updateItem.content(), updateItem.rating());
                     updateItemMap.remove(i.getId());
                 }
             });
@@ -234,8 +234,8 @@ public class ReviewService {
                 .map(u ->
                         ItemReviewEntity.builder()
                                 .shopReviewId(reviewId)
-                                .title(u.title())
-                                .reviews(u.reviews())
+                                .name(u.name())
+                                .content(u.content())
                                 .rating(u.rating())
                                 .build()
                 ).toList()

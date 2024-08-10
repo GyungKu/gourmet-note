@@ -17,9 +17,9 @@ public record ResponseItemReview(
     public static ResponseItemReview fromEntity(ItemReviewEntity entity) {
 //        if (entity == null) return null;
         return ResponseItemReview.builder()
-                .title(entity.getTitle())
+                .title(entity.getName())
                 .rating(entity.getRating())
-                .reviews(entity.getReviews())
+                .reviews(entity.getContent())
                 .id(entity.getId())
                 .createdAt(entity.getCreatedAt())
                 .build();

@@ -46,7 +46,7 @@
             <h5 class="card-title">{{ review.shop.title }}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{ review.shop.address }}</h6>
             <p class="card-text">
-              {{ review.reviews ? review.reviews : '리뷰 내용이 없습니다.' }}
+              {{ review.content ? review.content : '리뷰 내용이 없습니다.' }}
             </p>
             <small>평점: {{ review.rating ? review.rating : 'x' }}</small>
             <div>
@@ -64,9 +64,9 @@
         <div class="col-md-4 mb-5" v-for="item in review.items">
           <div class="card h-100">
             <div class="card-body">
-              <h2 class="card-title">{{ item.title }}</h2>
+              <h2 class="card-title">{{ item.name }}</h2>
               <p class="card-text">
-                {{ item.reviews ? item.reviews : '리뷰내용이 없습니다.' }}
+                {{ item.content ? item.content : '리뷰내용이 없습니다.' }}
               </p>
             </div>
             <div class="card-footer">

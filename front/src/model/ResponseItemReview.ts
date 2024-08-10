@@ -1,6 +1,6 @@
 export interface ResponseItemReview {
   id: number;
-  title: string;
+  name: string;
   rating?: number;
-  reviews?: string;
+  content?: string;
 }
