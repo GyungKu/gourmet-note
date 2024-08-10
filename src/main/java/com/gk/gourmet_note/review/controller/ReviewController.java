@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/content")
+@RequestMapping("/api/v1/reviews")
 @PreAuthorize("isAuthenticated()")
 public class ReviewController {
 
