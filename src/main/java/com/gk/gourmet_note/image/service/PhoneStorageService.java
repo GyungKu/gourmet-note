@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 @Transactional
 public class PhoneStorageService implements ImageService{
