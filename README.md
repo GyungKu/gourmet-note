@@ -20,6 +20,8 @@
 - Deploy: Termux(Ubuntu)
 
 ## 프로젝트 구조
+<details>
+<summary>토글 접기/펼치기</summary>
 
 ├─.github             
 │  └─workflows          
@@ -85,6 +87,8 @@
         │      └─gk           
         │          └─gourmet_note           
         └─resources           
+
+</details>
 
 ## 아키텍처
 <p align="center">
