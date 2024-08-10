@@ -16,9 +16,17 @@ public class ReviewImageEntity extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
     private String uploadName;
+
+    @Column(nullable = false)
     private String saveName;
+
+    @Column(nullable = false)
     private String url;
+
+    @Column(nullable = false)
     private Long shopReviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
