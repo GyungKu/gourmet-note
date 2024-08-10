@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Value("${upload.image.dir}")
     private String dir;
-    @Value("${upload.image.path}")
+    @Value("${resource.image.path}")
     private String path;
 
     @Override
