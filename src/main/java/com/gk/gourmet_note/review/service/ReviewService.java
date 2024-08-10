@@ -67,7 +67,7 @@ public class ReviewService {
 
         return ResponseReview.builder()
                 .id(shopReviewEntity.getId())
-                .reviews(shopReviewEntity.getContent())
+                .content(shopReviewEntity.getContent())
                 .rating(shopReviewEntity.getRating())
                 .shop(shop)
                 .createdAt(shopReviewEntity.getCreatedAt())
@@ -199,7 +199,7 @@ public class ReviewService {
         return entities.map(r ->
                 ResponseReview.builder()
                         .id(r.getId())
-                        .reviews(r.getContent())
+                        .content(r.getContent())
                         .shop(ResponseShop.fromEntity(r.getShop()))
                         .rating(r.getRating())
                         .createdAt(r.getCreatedAt())

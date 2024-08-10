@@ -11,7 +11,7 @@ import java.util.List;
 public record ResponseReview(
         Long id,
         Float rating,
-        String reviews,
+        String content,
         ResponseShop shop,
         LocalDateTime createdAt,
         List<ResponseItemReview> items,
