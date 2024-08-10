@@ -20,73 +20,78 @@
 - Deploy: Termux(Ubuntu)
 
 ## 프로젝트 구조
-├─.github
-│  └─workflows
-├─front
-│  ├─public
-│  └─src
-│      ├─assets
-│      │  ├─image
-│      │  └─js
-│      ├─components
-│      ├─model
-│      ├─router
-│      ├─stores
-│      └─views
-│          ├─login
-│          ├─my
-│          └─review
-├─gradle
-│  └─wrapper
-└─src
-    ├─main
-    │  ├─java
-    │  │  └─com
-    │  │      └─gk
-    │  │          └─gourmet_note
-    │  │              ├─common
-    │  │              │  ├─config
-    │  │              │  ├─entity
-    │  │              │  ├─exception
-    │  │              │  │  └─vo
-    │  │              │  ├─filter
-    │  │              │  └─naver
-    │  │              ├─image
-    │  │              │  ├─entity
-    │  │              │  ├─repository
-    │  │              │  ├─service
-    │  │              │  └─vo
-    │  │              ├─review
-    │  │              │  ├─controller
-    │  │              │  ├─entity
-    │  │              │  ├─repository
-    │  │              │  ├─service
-    │  │              │  └─vo
-    │  │              ├─shop
-    │  │              │  ├─controller
-    │  │              │  ├─entity
-    │  │              │  ├─repository
-    │  │              │  ├─service
-    │  │              │  └─vo
-    │  │              └─user
-    │  │                  ├─controller
-    │  │                  ├─entity
-    │  │                  ├─repository
-    │  │                  ├─service
-    │  │                  └─vo
-    │  └─resources
-    │      ├─static
-    │      │  └─assets
-    │      └─templates
-    └─test
-        ├─java
-        │  └─com
-        │      └─gk
-        │          └─gourmet_note
-        └─resources
+
+├─.github             
+│  └─workflows          
+├─front           
+│  ├─public            
+│  └─src            
+│      ├─assets           
+│      │  ├─image           
+│      │  └─js           
+│      ├─components           
+│      ├─model           
+│      ├─router           
+│      ├─stores           
+│      └─views           
+│          ├─login           
+│          ├─my           
+│          └─review           
+├─gradle           
+│  └─wrapper           
+└─src           
+    ├─main           
+    │  ├─java           
+    │  │  └─com           
+    │  │      └─gk           
+    │  │          └─gourmet_note           
+    │  │              ├─common           
+    │  │              │  ├─config           
+    │  │              │  ├─entity           
+    │  │              │  ├─exception           
+    │  │              │  │  └─vo           
+    │  │              │  ├─filter           
+    │  │              │  └─naver           
+    │  │              ├─image           
+    │  │              │  ├─entity           
+    │  │              │  ├─repository           
+    │  │              │  ├─service           
+    │  │              │  └─vo           
+    │  │              ├─review           
+    │  │              │  ├─controller           
+    │  │              │  ├─entity           
+    │  │              │  ├─repository           
+    │  │              │  ├─service           
+    │  │              │  └─vo           
+    │  │              ├─shop           
+    │  │              │  ├─controller           
+    │  │              │  ├─entity           
+    │  │              │  ├─repository           
+    │  │              │  ├─service           
+    │  │              │  └─vo           
+    │  │              └─user           
+    │  │                  ├─controller           
+    │  │                  ├─entity           
+    │  │                  ├─repository           
+    │  │                  ├─service           
+    │  │                  └─vo           
+    │  └─resources           
+    │      ├─static           
+    │      │  └─assets           
+    │      └─templates           
+    └─test           
+        ├─java           
+        │  └─com           
+        │      └─gk           
+        │          └─gourmet_note           
+        └─resources           
 
 ## 아키텍처
-![image](https://github.com/user-attachments/assets/1eb3cfaf-2028-4f4c-8f0c-d22654e8ec34)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1eb3cfaf-2028-4f4c-8f0c-d22654e8ec34"   width="500" height="400"/>
+</p>
 
 ## ERD
-![image](https://github.com/user-attachments/assets/dfae193a-24dd-4142-9119-7c29a9efe74f)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/dfae193a-24dd-4142-9119-7c29a9efe74f"   width="800" height="400"/>
+</p>
