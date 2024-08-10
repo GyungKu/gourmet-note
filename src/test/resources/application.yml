@@ -1,3 +1,11 @@
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        max-age: 31536000
+
 spring:
   datasource:
     url: jdbc:h2:mem:tesdb;MODE=PostgreSQL
@@ -18,16 +26,16 @@ naver:
   client_id: client
   secret: client
 
-server:
-  servlet:
-    session:
-      cookie:
-        http-only: true
-        secure: true
-        max-age: 31536000
-
 upload:
   image:
     dir: dir
     path: path
+
 baseurl: url
+
+storage:
+  url: storageUrl
+
+resource:
+  image:
+    path: path
