@@ -14,7 +14,9 @@ public class ResponseShop {
     private String address;
 
     public void replaceTitle() {
-        title = title.replace("<b>", "").replace("</b>", "");
+        title = title.replaceAll("<b>", "")
+                .replaceAll("</b>", "")
+                .replaceAll("amp;", "");
     }
 
     public static ResponseShop fromEntity(ShopEntity entity) {
