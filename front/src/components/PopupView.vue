@@ -2,11 +2,9 @@
   <div class="container">
     <div class="popup-overlay" @click.self="closePopup">
       <div class="popup-content">
-        <!-- <div class="map-container">
-          <div id="map"></div>
-        </div> -->
+        <KakaoMap :shop="props.shop"></KakaoMap>
         <button @click="closePopup" class="close-button">X</button>
-        <div>
+        <div class="text-box">
           <li class="detail-text">
             <p>{{ props.shop.title }}</p>
           </li>
@@ -29,6 +27,7 @@
 
 <script setup lang="ts">
 import type { Shop } from '@/model/Shop';
+import KakaoMap from './KakaoMap.vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps<{ shop: Shop }>();
@@ -39,6 +38,17 @@ const closePopup = () => {
 </script>
 
 <style scoped>
+.container {
+  position: fixed; /* 부모 요소가 fixed로 설정되어 있어야 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20; /* z-index를 높게 설정하여 팝업이 최상단에 */
+}
 body.dark .detail-text {
   color: black;
 }
@@ -52,21 +62,27 @@ body.dark .detail-text {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .popup-content {
   position: relative;
-  background: white;
-  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 800px;
   flex-direction: column;
   display: flex;
+  z-index: 10;
 }
 
-body.dark .popup-content {
+.text-box {
+  background: white;
+  padding-bottom: 40px;
+  border-radius: 8px;
+}
+
+body.dark .text-box {
   background-color: #10182f;
 }
 
@@ -84,15 +100,4 @@ body.dark .popup-content {
   font-size: 1.2em;
   cursor: pointer;
 }
-
-/* .map-container {
-  width: 100%;
-  height: 400px;
-  margin-bottom: 10px;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
-} */
 </style>

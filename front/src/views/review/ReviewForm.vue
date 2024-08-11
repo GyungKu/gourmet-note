@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="form-container">
+      <KakaoMap :shop="review.shop"></KakaoMap>
       <ul>
         <li>{{ review.shop.title }}</li>
         <li>{{ review.shop.address }}</li>
@@ -88,6 +89,7 @@
 </template>
 
 <script setup lang="ts">
+import KakaoMap from '@/components/KakaoMap.vue';
 import type { RequestItem } from '@/model/RequestItem';
 import type { RequestReview } from '@/model/RequestReview';
 import type { RequestShop } from '@/model/RequestShop';
