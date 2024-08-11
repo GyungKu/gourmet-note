@@ -241,13 +241,15 @@ onMounted(() => {
 
 .form-container {
   margin-top: 150px;
+  width: 100%;
+  max-width: 600px;
 }
 
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  width: 500px;
+  width: 100%;
   text-align: center;
 }
 
@@ -261,7 +263,7 @@ ul li {
   gap: 10px;
   margin-bottom: 20px;
   justify-content: space-evenly;
-  width: 1200px;
+  width: 100%;
 }
 
 .item {
@@ -331,5 +333,55 @@ input.form-control {
 
 .remove-btn:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    margin-top: 10px;
+    max-width: 100%;
+  }
+
+  .items-container {
+    flex-direction: column;
+  }
+
+  .item {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  input.form-control {
+    font-size: 14px;
+  }
+
+  .actions button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-container {
+    margin-top: 5px;
+  }
+
+  .item {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .actions button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  input.form-control {
+    font-size: 12px;
+    padding: 6px;
+  }
 }
 </style>

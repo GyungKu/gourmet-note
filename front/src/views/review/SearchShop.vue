@@ -73,6 +73,7 @@ const closePopup = () => {
   display: grid;
   place-items: center;
   height: 100vh;
+  padding: 1rem;
 }
 
 .col-lg-9 {
@@ -80,12 +81,14 @@ const closePopup = () => {
 }
 
 .shop-input {
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 .shop-list {
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
   list-style: none;
   padding: 0;
@@ -93,5 +96,27 @@ const closePopup = () => {
 
 .shop-list li {
   margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .shop-input {
+    width: 90%;
+    max-width: none;
+  }
+
+  .shop-list {
+    width: 90%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .shop-input {
+    font-size: 14px;
+  }
+
+  .shop-list li {
+    font-size: 14px;
+  }
 }
 </style>

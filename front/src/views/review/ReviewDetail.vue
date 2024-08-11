@@ -124,34 +124,40 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 200px;
+  gap: 100px;
   margin-bottom: 50px;
 }
 
 .carousel-container {
-  width: 450px;
-  height: 350px;
+  width: 100%;
+  max-width: 450px;
+  height: auto;
   overflow: hidden;
   position: relative;
 }
 
 .carousel-inner {
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 .carousel-item img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
 }
 
 .text-content {
   flex: 1;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 10px;
+  height: auto;
 }
 
 .card-body.review {
-  height: 350px;
+  height: auto; /* 모바일에서는 높이 자동 조정 */
+  padding: 1rem; /* 모바일에서 패딩 조정 */
 }
 
 .card-body {
@@ -160,6 +166,10 @@ onMounted(() => {
 
 .items-card {
   margin-top: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
 }
 
 .carousel-control-prev-icon,
@@ -172,5 +182,40 @@ body.dark .card-body {
 }
 body.dark .card-footer {
   background-color: #172346;
+}
+
+@media (max-width: 768px) {
+  .review-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .carousel-container {
+    width: 100%;
+    height: auto;
+  }
+
+  .text-content {
+    max-width: 100%;
+  }
+
+  .card-body.review {
+    height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-container {
+    height: auto;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .items-card {
+    margin-top: 10px;
+  }
 }
 </style>

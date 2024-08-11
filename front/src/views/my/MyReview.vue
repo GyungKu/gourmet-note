@@ -122,14 +122,20 @@ onMounted(() => {
   box-sizing: border-box;
 }
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-top: 5rem;
   height: 100vh;
 }
 .card-container {
   display: flex;
-  width: 1040px;
-  justify-content: space-evenly;
   flex-wrap: wrap;
-  margin-top: 130px;
+  justify-content: space-around;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 1200px;
 }
 .card {
   margin: 10px;
@@ -137,8 +143,9 @@ onMounted(() => {
   border-radius: 10px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  width: 300px;
-  height: 500px;
+  width: 100%;
+  max-width: 300px; /* 최대 폭 설정 */
+  height: auto; /* 높이는 자동으로 조정 */
 }
 .card-header img {
   width: 100%;
@@ -151,7 +158,6 @@ onMounted(() => {
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  min-height: 250px;
 }
 
 body.dark .card-header {
@@ -183,7 +189,7 @@ body.dark .card-body {
 
 .card-body p {
   font-size: 13px;
-  margin: 0 0 40px;
+  margin: 0 0 20px;
 }
 .review {
   display: flex;
@@ -205,11 +211,37 @@ body.dark .card-body {
 
 .pagination {
   display: flex;
-  width: 1040px;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-top: 50px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 1200px;
 }
+
+.pagination ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 50px;
+}
+
+.pagination .page-item {
+  margin: 0 5px;
+}
+
+.pagination .page-link {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.page-link.active {
+  font-weight: bold;
+}
+
 body.dark .pagination a {
   background-color: #10182f;
   color: #f7f8fc;
@@ -222,5 +254,64 @@ a {
 
 body.dark a {
   color: white;
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+  .card-body p {
+    font-size: 12px;
+    margin: 0 0 10px;
+  }
+
+  .pagination {
+    flex-direction: row;
+  }
+
+  .page-link {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 미디어 쿼리: 화면 폭이 576px 이하일 때 */
+@media (max-width: 576px) {
+  .card {
+    margin: 5px;
+  }
+
+  .card-body p {
+    font-size: 11px;
+    margin: 0 0 5px;
+  }
+
+  .review-info h5 {
+    font-size: 14px;
+  }
+
+  .review-info small {
+    font-size: 12px;
+  }
+
+  .pagination {
+    flex-direction: row;
+    margin-top: 10px;
+  }
+
+  .page-item {
+    margin: 2px 0;
+  }
+
+  .page-link {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
 </style>
