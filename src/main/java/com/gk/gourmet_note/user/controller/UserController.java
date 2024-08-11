@@ -1,6 +1,5 @@
 package com.gk.gourmet_note.user.controller;
 
-import com.gk.gourmet_note.user.entity.UserEntity;
 import com.gk.gourmet_note.user.service.UserService;
 import com.gk.gourmet_note.user.vo.LoginUser;
 import com.gk.gourmet_note.user.vo.ResponseMyInfo;
@@ -14,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +53,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseMyInfo> myInfo(@AuthenticationPrincipal LoginUser user) {
         ResponseMyInfo response = service.getMyInfo(user.id());
 
@@ -60,6 +61,7 @@ public class UserController {
     }
 
     @PatchMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseUser> update(@AuthenticationPrincipal LoginUser user,
                                                @Valid @RequestBody UpdateUser update) {
 
