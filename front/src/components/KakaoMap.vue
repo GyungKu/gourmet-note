@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import type { Shop } from '@/model/Shop';
-import { onMounted } from 'vue';
+import { watch } from 'vue';
 
 const props = defineProps<{ shop: Shop }>();
 
@@ -39,9 +39,13 @@ const loadKaKaoMap = () => {
   };
 };
 
-onMounted(() => {
-  loadKaKaoMap();
-});
+watch(
+  () => props.shop,
+  (shop) => {
+    if (shop) loadKaKaoMap();
+  },
+  { immediate: true },
+);
 </script>
 
 <style scoped>
