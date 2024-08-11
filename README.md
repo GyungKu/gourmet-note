@@ -92,8 +92,9 @@
 
 ## 아키텍처
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/1eb3cfaf-2028-4f4c-8f0c-d22654e8ec34"   width="500" height="400"/>
+  <img src="https://github.com/user-attachments/assets/9e9a492c-74c1-4f28-99c6-272d8656b654"   width="600" height="400"/>
 </p>
+
 
 ## ERD
 <p align="center">
