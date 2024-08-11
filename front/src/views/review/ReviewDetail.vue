@@ -41,6 +41,7 @@
         </div>
       </div>
       <div class="text-content">
+        <div id="map"></div>
         <div class="card">
           <div class="card-body review">
             <h5 class="card-title">{{ review.shop.title }}</h5>
@@ -89,6 +90,35 @@ const review = ref<ResponseReview>({ shop: { title: '', address: '' }, id: 0, cr
 const route = useRoute();
 const router = useRouter();
 
+const loadKaKaoMap = () => {
+  const appKey = import.meta.env.VITE_KAKAO_MAP_KEY;
+  const script = document.createElement('script');
+  script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false&libraries=services`;
+  document.head.appendChild(script);
+
+  script.onload = () => {
+    window.kakao.maps.load(() => {
+      const container = document.getElementById('map');
+      const options = {
+        center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3,
+      };
+      const map = new window.kakao.maps.Map(container, options);
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(review.value.shop.address, (res: any, status: any) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const latLng = new window.kakao.maps.LatLng(res[0].y, res[0].x);
+          new window.kakao.maps.Marker({
+            map: map,
+            position: latLng,
+          });
+          map.setCenter(latLng);
+        }
+      });
+    });
+  };
+};
+
 const fetchReview = () => {
   const reviewId = route.params.id;
   axios
@@ -108,6 +138,7 @@ const fetchReview = () => {
 };
 
 onMounted(() => {
+  loadKaKaoMap();
   fetchReview();
 });
 </script>
@@ -182,6 +213,15 @@ body.dark .card-body {
 }
 body.dark .card-footer {
   background-color: #172346;
+}
+
+#map {
+  width: 100%;
+  height: 250px;
+}
+
+.card-text {
+  white-space: pre-wrap;
 }
 
 @media (max-width: 768px) {
