@@ -23,6 +23,11 @@ onMounted(() => {
       },
     })
     .then((res) => {
+      if (res.data.type === 'signup') {
+        alert('회원가입 완료');
+      } else {
+        alert('로그인 완료');
+      }
       localStorage.setItem('username', res.data.username);
       window.opener.location.href = '/';
       window.close();

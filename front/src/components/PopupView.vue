@@ -2,11 +2,17 @@
   <div class="container">
     <div class="popup-overlay" @click.self="closePopup">
       <div class="popup-content">
+        <!-- <div class="map-container">
+          <div id="map"></div>
+        </div> -->
         <button @click="closePopup" class="close-button">X</button>
-        <!-- <iframe frameborder="0" class="popup-iframe"> -->
         <div>
-          <li class="detail-text">{{ props.shop.title }}</li>
-          <li class="detail-text">{{ props.shop.address }}</li>
+          <li class="detail-text">
+            <p>{{ props.shop.title }}</p>
+          </li>
+          <li class="detail-text">
+            <p>{{ props.shop.address }}</p>
+          </li>
           <li v-if="props.shop.link"><a :href="props.shop.link" target="_blank">링크</a></li>
           <router-link
             :to="{
@@ -16,7 +22,6 @@
             >리뷰 등록
           </router-link>
         </div>
-        <!-- </iframe> -->
       </div>
     </div>
   </div>
@@ -43,7 +48,7 @@ body.dark .detail-text {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,11 +62,17 @@ body.dark .detail-text {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 800px;
+  flex-direction: column;
+  display: flex;
+}
+
+body.dark .popup-content {
+  background-color: #10182f;
 }
 
 .popup-iframe {
   width: 100%;
-  height: 500px;
+  height: 1000px;
 }
 
 .close-button {
@@ -73,4 +84,15 @@ body.dark .detail-text {
   font-size: 1.2em;
   cursor: pointer;
 }
+
+/* .map-container {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+} */
 </style>

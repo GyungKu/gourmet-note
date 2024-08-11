@@ -3,6 +3,7 @@ package com.gk.gourmet_note.user.controller;
 import com.gk.gourmet_note.user.entity.UserEntity;
 import com.gk.gourmet_note.user.service.UserService;
 import com.gk.gourmet_note.user.vo.LoginUser;
+import com.gk.gourmet_note.user.vo.ResponseMyInfo;
 import com.gk.gourmet_note.user.vo.ResponseUser;
 import com.gk.gourmet_note.user.vo.UpdateUser;
 import jakarta.servlet.http.Cookie;
@@ -26,19 +27,15 @@ public class UserController {
 
     @GetMapping("/naver")
     public ResponseEntity<ResponseUser> naverLogin(String code, HttpServletRequest request) {
-        UserEntity userEntity = service.naverLogin(code);
+        ResponseUser responseUser = service.naverLogin(code);
 
         HttpSession session = request.getSession();
         LoginUser loginUser = LoginUser.builder()
-                .id(userEntity.getId())
-                .username(userEntity.getUsername())
-                .role(userEntity.getRole())
+                .id(responseUser.id())
+                .username(responseUser.username())
+                .role(responseUser.role())
                 .build();
         session.setAttribute("login", loginUser);
-
-        ResponseUser responseUser = ResponseUser.builder()
-                .username(userEntity.getUsername())
-                .build();
 
         return ResponseEntity.ok(responseUser);
     }
@@ -56,8 +53,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseUser> myInfo(@AuthenticationPrincipal LoginUser user) {
-        ResponseUser response = service.getMyInfo(user.id());
+    public ResponseEntity<ResponseMyInfo> myInfo(@AuthenticationPrincipal LoginUser user) {
+        ResponseMyInfo response = service.getMyInfo(user.id());
 
         return ResponseEntity.ok(response);
     }

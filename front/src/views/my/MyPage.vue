@@ -3,18 +3,23 @@
     <div class="userinfo">
       <div class="info">
         <h4>{{ myInfo?.username }}</h4>
-        <p>작성 리뷰: {{ myInfo?.reviewCount }}</p>
-        <button class="button expand follow" @click="update">이름 수정</button>
+        <p>이메일: {{ myInfo?.email }}</p>
+        <p>성별: {{ myInfo?.gender === 'M' ? '남자' : myInfo?.gender === 'F' ? '여자' : 'X' }}</p>
+        <p>연령대: {{ myInfo?.age }}</p>
+        <p>생년: {{ myInfo?.birthyear }}</p>
+        <p>작성 리뷰수: {{ myInfo?.reviewCount }}</p>
+        <button class="button expand follow" @click="update">닉네임 수정</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { ResponseMyInfo } from '@/model/ResponseMyInfo';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
-const myInfo = ref<{ username: string; reviewCount: number }>();
+const myInfo = ref<ResponseMyInfo>();
 
 const getMyInfo = () => {
   axios.get('/v1/users').then((res) => {
@@ -69,7 +74,7 @@ p {
   justify-content: center;
   margin: auto;
   width: 283px;
-  height: 250px;
+  height: 300px;
   text-align: center;
 }
 .photo {
