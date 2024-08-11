@@ -93,7 +93,7 @@ public class ReviewService {
         imageService.uploadImages(files, reviewId);
         imageService.deleteImages(update.deleteImages());
 
-        List<Long> deleteItems = updateItemAndDeleteIds(reviewId, update.items());
+        List<Long> deleteItems = itemUpdateAndDeleteIds(reviewId, update.items());
         if (!deleteItems.isEmpty()) itemReviewRepository.deleteAllByIdInBatch(deleteItems);
         return entity;
     }
@@ -209,38 +209,44 @@ public class ReviewService {
         );
     }
 
-    private List<Long> updateItemAndDeleteIds(Long reviewId, List<UpdateItemReview> updateList) {
+    private List<Long> itemUpdateAndDeleteIds(Long reviewId, List<UpdateItemReview> updateList) {
+        /**
+         * id가 null (새로 추가된 메뉴)인 것들을 저장 리스트에 담고, 업데이트 리스트에서 제거 한다.
+         */
+        List<ItemReviewEntity> saveItems = new ArrayList<>();
+        updateList.forEach(u -> {
+            if (u.id() == null) saveItems.add(UpdateItemReview.toEntity(u, reviewId));
+        });
+        updateList.removeIf(u -> u.id() == null);
+
+        /**
+         * id를 key, update vo를 value인 Map으로 만든다.
+         */
         Map<Long, UpdateItemReview> updateItemMap = updateList.stream()
                 .collect(Collectors
                         .toMap(UpdateItemReview::id, u -> u));
-        List<ItemReviewEntity> items = getItemReviewEntities(List.of(reviewId));
 
+        /**
+         * 해당 리뷰id의 메뉴 리뷰들 가져온 뒤, id가 null이었던 리스트를 저장한다.
+         */
+        List<ItemReviewEntity> items = getItemReviewEntities(List.of(reviewId));
+        itemReviewRepository.saveAll(saveItems);
+
+        /**
+         * 해당 리뷰의 메뉴 엔티티를 돌면서 updateList에 같은 id가 없으면 삭제할 id 이므로 삭제할 id에 담는다.
+         * 같은 id가 있는 것은 dirty checking을 통해 업데이트 한다.
+         */
         List<Long> deleteItems = new ArrayList<>();
+
         if (items != null) {
             items.forEach(i -> {
-                UpdateItemReview updateItem = updateItemMap.get(i.getId());
-                if (updateItem == null) deleteItems.add(i.getId()); // items에 있는 아이디가 update에 없다면 삭제할 id 리스트에 추가
-                else { // 있다면 수정하고 map 에서 remove
-                    i.update(updateItem.name(), updateItem.content(), updateItem.rating());
-                    updateItemMap.remove(i.getId());
-                }
-            });
+                        UpdateItemReview updateItem = updateItemMap.get(i.getId());
+                        if (updateItem == null) deleteItems.add(i.getId()); // items에 있는 아이디가 update에 없다면 삭제할 id 리스트에 추가
+                        else i.update(updateItem.name(), updateItem.content(), updateItem.rating()); // 있다면 수정한다.
+                    }
+            );
+
         }
-
-        // map 에 남아있는 것은, 새로 추가된 것이기에 저장
-        itemReviewRepository.saveAll(updateItemMap
-                .values()
-                .stream()
-                .map(u ->
-                        ItemReviewEntity.builder()
-                                .shopReviewId(reviewId)
-                                .name(u.name())
-                                .content(u.content())
-                                .rating(u.rating())
-                                .build()
-                ).toList()
-        );
-
         return deleteItems;
     }
 }

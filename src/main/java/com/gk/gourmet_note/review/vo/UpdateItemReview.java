@@ -1,5 +1,6 @@
 package com.gk.gourmet_note.review.vo;
 
+import com.gk.gourmet_note.review.entity.ItemReviewEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -11,4 +12,12 @@ public record UpdateItemReview(
         Float rating,
         String content
 ) {
+    public static ItemReviewEntity toEntity(UpdateItemReview update, Long shopReviewId) {
+        return ItemReviewEntity.builder()
+                .shopReviewId(shopReviewId)
+                .name(update.name())
+                .content(update.content())
+                .rating(update.rating())
+                .build();
+    }
 }
