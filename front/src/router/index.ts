@@ -1,3 +1,4 @@
+import About from '@/views/About.vue';
 import Home from '@/views/Home.vue';
 import Login from '@/views/login/Login.vue';
 import NaverLogin from '@/views/login/NaverLogin.vue';
@@ -12,6 +13,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { name: 'home', path: '/', component: Home },
+    { name: 'about', path: '/about', component: About },
     { name: 'login', path: '/login', component: Login, meta: { requiresAuth: false } },
     {
       name: 'naverLogin',

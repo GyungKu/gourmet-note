@@ -35,6 +35,14 @@
                 </li>
                 <li
                   class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"
+                  :class="{ active: route.name === 'about' }"
+                >
+                  <router-link class="nav-link" :to="{ name: 'about' }" @click="handleNavClick"
+                    >About</router-link
+                  >
+                </li>
+                <li
+                  class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"
                   :class="{ active: route.name === 'login' }"
                   v-if="!username"
                 >
