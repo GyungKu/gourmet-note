@@ -1,10 +1,7 @@
 package com.gk.gourmet_note.user.controller;
 
 import com.gk.gourmet_note.user.service.UserService;
-import com.gk.gourmet_note.user.vo.LoginUser;
-import com.gk.gourmet_note.user.vo.ResponseMyInfo;
-import com.gk.gourmet_note.user.vo.ResponseUser;
-import com.gk.gourmet_note.user.vo.UpdateUser;
+import com.gk.gourmet_note.user.vo.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +25,21 @@ public class UserController {
     @GetMapping("/naver")
     public ResponseEntity<ResponseUser> naverLogin(String code, HttpServletRequest request) {
         ResponseUser responseUser = service.naverLogin(code);
+
+        HttpSession session = request.getSession();
+        LoginUser loginUser = LoginUser.builder()
+                .id(responseUser.id())
+                .username(responseUser.username())
+                .role(responseUser.role())
+                .build();
+        session.setAttribute("login", loginUser);
+
+        return ResponseEntity.ok(responseUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseUser> login(@RequestBody RequestLogin login, HttpServletRequest request) {
+        ResponseUser responseUser = service.login(login);
 
         HttpSession session = request.getSession();
         LoginUser loginUser = LoginUser.builder()

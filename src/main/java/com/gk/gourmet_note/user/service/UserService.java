@@ -7,11 +7,13 @@ import com.gk.gourmet_note.review.service.ReviewService;
 import com.gk.gourmet_note.user.entity.UserEntity;
 import com.gk.gourmet_note.user.entity.UserRole;
 import com.gk.gourmet_note.user.repository.UserRepository;
+import com.gk.gourmet_note.user.vo.RequestLogin;
 import com.gk.gourmet_note.user.vo.ResponseMyInfo;
 import com.gk.gourmet_note.user.vo.ResponseUser;
 import com.gk.gourmet_note.user.vo.UpdateUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +28,18 @@ public class UserService {
     private final UserRepository repository;
     private final NaverService naverService;
     private final ReviewService reviewService;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseUser naverLogin(String code) {
         NaverUserInfo naverUser = naverService.login(code);
         return getOrSaveByNaverUserInfo(naverUser);
 
+    }
+
+    public ResponseUser login(RequestLogin login) {
+        UserEntity userEntity = getByEmail(login);
+        verifyPassword(login, userEntity);
+        return ResponseUser.fromEntity(userEntity, "login");
     }
 
     public ResponseMyInfo getMyInfo(Long id) {
@@ -75,6 +84,19 @@ public class UserService {
             responseUser = ResponseUser.fromEntity(byNaverId.get(), "login");
         }
         return responseUser;
+    }
+
+    private UserEntity getByEmail(RequestLogin login) {
+        return repository.findByEmail(login.email())
+                .orElseThrow(() -> {
+                    throw new GlobalException("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST);
+                });
+    }
+
+    private void verifyPassword(RequestLogin login, UserEntity userEntity) {
+        if (!passwordEncoder.matches(login.password(), userEntity.getPassword())) {
+            throw new GlobalException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private UserEntity getById(Long id) {

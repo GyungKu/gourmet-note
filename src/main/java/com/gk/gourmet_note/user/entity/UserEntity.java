@@ -22,12 +22,15 @@ public class UserEntity extends BaseEntity {
     private String birthyear;
     private String age;
     private String username;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Builder
-    public UserEntity(String naverId, String email, String gender, String birthday, String birthyear, String age, String username, UserRole role) {
+    public UserEntity(String naverId, String email, String gender, String birthday, String birthyear, String age,
+                      String username, UserRole role, String password) {
+
         this.naverId = naverId;
         this.email = email;
         this.gender = gender;
@@ -36,6 +39,7 @@ public class UserEntity extends BaseEntity {
         this.age = age;
         this.username = username;
         this.role = role;
+        this.password = password;
     }
 
     public void update(String username) {
