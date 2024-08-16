@@ -9,7 +9,7 @@
           </router-link>
         </div>
         <div class="card-body">
-          <span class="tag tag-teal">카테고리?</span>
+          <!-- <span class="tag tag-teal">카테고리?</span> -->
           <router-link :to="{ name: 'reviewDetail', params: { id: review.id } }">
             <h4>{{ review.shop.title }}</h4>
           </router-link>
@@ -26,6 +26,20 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="narrow-w form-search d-flex align-items-stretch mb-3 aos-init aos-animate query-input"
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
+      <input
+        type="text"
+        class="form-control px-4"
+        placeholder="가게 이름을 입력해주세요"
+        @keydown.enter="fetchReview"
+        v-model="query"
+      />
+      <button type="button" class="btn btn-primary" @click="fetchReview">Search</button>
     </div>
     <!-- Pagination -->
     <div class="pagination">
@@ -72,6 +86,7 @@ const startPage = ref<number>(
   responsePage.value.pageNumber - ((responsePage.value.pageNumber - 1) % 5),
 );
 const endPage = ref<number>(startPage.value + 4);
+const query = ref<string>('');
 
 const pages = computed(() => {
   const result = [];
@@ -86,6 +101,7 @@ const fetchReview = () => {
     .get('/v1/reviews', {
       params: {
         page: responsePage.value.pageNumber,
+        query: query.value,
       },
     })
     .then((res) => {
@@ -94,7 +110,10 @@ const fetchReview = () => {
       responsePage.value.totalPages = res.data.totalPages;
     })
     .catch((err) => {
-      if (err.response.status === 404) alert(err.response.data.message);
+      if (err.response.status === 404) {
+        reviewList.value = [];
+        alert(err.response.data.message);
+      }
     });
 };
 
@@ -209,6 +228,12 @@ body.dark .card-body {
   color: #545d7a;
 }
 
+.query-input {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px auto;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -271,6 +296,11 @@ body.dark a {
     margin: 0 0 10px;
   }
 
+  .query-input {
+    width: 90%;
+    max-width: none;
+  }
+
   .pagination {
     flex-direction: row;
   }
@@ -298,6 +328,10 @@ body.dark a {
 
   .review-info small {
     font-size: 12px;
+  }
+
+  .query-input {
+    font-size: 14px;
   }
 
   .pagination {

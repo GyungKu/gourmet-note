@@ -50,7 +50,7 @@ public class ReviewService {
 
 
     public ResponseReview getReviewById(Long shopReviewId, Long userId) {
-        ShopReviewEntity shopReviewEntity = ShopReviewGetById(shopReviewId);
+        ShopReviewEntity shopReviewEntity = shopReviewGetById(shopReviewId);
 
         verifyResourceOwner(userId, shopReviewEntity.getUserId());
 
@@ -75,20 +75,20 @@ public class ReviewService {
     }
 
 
-    public Page<ResponseReview> getByMyReview(Long userId, Integer page) {
-        Page<ShopReviewEntity> myReviews = getPagesByUserIdAndPage(userId, page);
-
-        // shopReviewId 리스트로 itemReviewList 를 가져온 뒤 ShopReviewId로 묶어줌
+    public Page<ResponseReview> getByMyReview(Long userId, String query, Integer page) {
+        Page<ShopReviewEntity> myReviews = getPagesByuserIdAndQuery(userId, query, page);
         List<ItemReviewEntity> itemReviewEntityList = itemReviewService.getAllByShopReviewId(getReviewIds(
                 myReviews.getContent()));
         Map<Long, List<ItemReviewEntity>> itemsMap = itemReviewService.EntitiesGroupByShopReviewId(
                 itemReviewEntityList);
-
-        return getResponsePageFromEntities(myReviews, itemsMap == null ? null : itemsMap);
+        return getResponsePageFromEntities(myReviews, itemsMap);
     }
 
-    public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId) throws IOException {
-        ShopReviewEntity entity = ShopReviewGetById(reviewId);
+    public ShopReviewEntity update(UpdateReview update, List<MultipartFile> files, Long reviewId, 
+                                   Long userId) throws IOException {
+        
+        ShopReviewEntity entity = shopReviewGetById(reviewId);
+        verifyResourceOwner(entity.getUserId(), userId);
         entity.update(update.content(), update.rating());
         imageService.uploadImages(files, reviewId);
         imageService.deleteImages(update.deleteImages());
@@ -98,6 +98,23 @@ public class ReviewService {
 
     public Long getReviewCountByUserId(Long userId) {
         return shopReviewRepository.countByUserId(userId);
+    }
+
+    public void delete(Long reviewId, Long userId) {
+        ShopReviewEntity entity = shopReviewGetById(reviewId);
+        verifyResourceOwner(entity.getUserId(), userId);
+        itemReviewService.deleteAllByReviewId(entity.getId());
+        imageService.deleteAllByReviewId(entity.getId());
+        shopReviewRepository.delete(entity);
+    }
+
+    public Page<ResponseReview> getSearchReview(Long userId, String query, Integer page) {
+        Page<ShopReviewEntity> entityPage = getPagesByuserIdAndQuery(userId, query, page);
+        List<ItemReviewEntity> itemReviewEntityList = itemReviewService.getAllByShopReviewId(getReviewIds(
+                entityPage.getContent()));
+        Map<Long, List<ItemReviewEntity>> itemsMap = itemReviewService.EntitiesGroupByShopReviewId(
+                itemReviewEntityList);
+        return getResponsePageFromEntities(entityPage, itemsMap);
     }
 
     /**
@@ -116,7 +133,7 @@ public class ReviewService {
     }
 
 
-    private ShopReviewEntity ShopReviewGetById(Long shopReviewId) {
+    private ShopReviewEntity shopReviewGetById(Long shopReviewId) {
         return shopReviewRepository.findById(shopReviewId)
                 .orElseThrow(() -> {
                     throw new GlobalException("존재하지 않는 리뷰", HttpStatus.NOT_FOUND);
@@ -159,6 +176,15 @@ public class ReviewService {
                                 itemsMap.get(r.getId())))
                         .build()
         );
+    }
+
+    private Page<ShopReviewEntity> getPagesByuserIdAndQuery(Long userId, String query, Integer page) {
+        Page<ShopReviewEntity> entityPage = shopReviewRepository.findAllByQuery(userId, query,
+                PageRequest.of(page - 1, 6));
+        if (entityPage.getContent() == null || entityPage.getContent().isEmpty()) {
+            throw new GlobalException("존재하는 리뷰가 없습니다", HttpStatus.NOT_FOUND);
+        }
+        return entityPage;
     }
 
 }

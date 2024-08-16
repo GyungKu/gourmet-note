@@ -8,6 +8,7 @@ import com.gk.gourmet_note.review.vo.UpdateReview;
 import com.gk.gourmet_note.user.vo.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,21 +47,30 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponseReview>> getByMyReview(@AuthenticationPrincipal LoginUser user,
+    public ResponseEntity<Page<ResponseReview>> getByMyReview(String query,
+                                                              @AuthenticationPrincipal LoginUser user,
                                                               @RequestParam(defaultValue = "1") Integer page) {
 
-        Page<ResponseReview> responseReviews = service.getByMyReview(user.id(), page);
+        Page<ResponseReview> responseReviews = service.getByMyReview(user.id(), query, page);
         return ResponseEntity.ok(responseReviews);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Long> updateReview(@PathVariable Long id,
                                              @Valid @RequestPart(value = "request") UpdateReview updateReview,
-                                             @RequestPart(required = false) List<MultipartFile> files)
+                                             @RequestPart(required = false) List<MultipartFile> files,
+                                             @AuthenticationPrincipal LoginUser user)
             throws IOException {
 
-        ShopReviewEntity entity = service.update(updateReview, files, id);
+        ShopReviewEntity entity = service.update(updateReview, files, id, user.id());
         return ResponseEntity.ok(entity.getId());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal LoginUser user) {
+        service.delete(id, user.id());
+
+        return ResponseEntity.noContent().build();
     }
 
 }

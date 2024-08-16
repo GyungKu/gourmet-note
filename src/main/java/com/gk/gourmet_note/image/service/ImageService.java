@@ -13,4 +13,5 @@ public interface ImageService {
 
     void deleteImages(List<Long> ids);
 
+    void deleteAllByReviewId(Long reviewId);
 }

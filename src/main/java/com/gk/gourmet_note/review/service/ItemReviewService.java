@@ -105,4 +105,7 @@ public class ItemReviewService {
         if (!deleteItems.isEmpty()) itemReviewRepository.deleteAllByIdInBatch(deleteItems);
     }
 
+    public void deleteAllByReviewId(Long reviewId) {
+        itemReviewRepository.deleteAllByShopReviewId(reviewId);
+    }
 }

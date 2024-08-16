@@ -32,9 +32,7 @@ public class LocalStoreService implements ImageService {
     private String url; // 서버의 baseurl
 
     @Override
-    public List<ResponseImage> uploadImages(List<MultipartFile> multipartFiles, Long reviewId)
-    {
-
+    public List<ResponseImage> uploadImages(List<MultipartFile> multipartFiles, Long reviewId) {
         if (multipartFiles == null) return null; // 업로드된 이미지가 없다면 null 반환
 
         List<ReviewImageEntity> images = new ArrayList<>();
@@ -62,6 +60,16 @@ public class LocalStoreService implements ImageService {
             File file = new File(getDirPath(i.getSaveName()));
             if (file.exists()) file.delete();
         });
+    }
+
+    @Override
+    public void deleteAllByReviewId(Long reviewId) {
+        List<ReviewImageEntity> images = reviewImageRepository.findAllByShopReviewIdIn(List.of(reviewId));
+        if (images == null || images.isEmpty()) return;
+        deleteImages(images
+                .stream()
+                .map(ReviewImageEntity::getId)
+                .toList());
     }
 
     private ReviewImageEntity uploadAndGetEntity(MultipartFile file, Long reviewId) {

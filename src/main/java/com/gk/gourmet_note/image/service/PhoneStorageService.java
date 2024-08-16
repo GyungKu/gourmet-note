@@ -56,6 +56,16 @@ public class PhoneStorageService implements ImageService{
         reviewImageRepository.deleteAllByIdInBatch(ids);
     }
 
+    @Override
+    public void deleteAllByReviewId(Long reviewId) {
+        List<ReviewImageEntity> images = reviewImageRepository.findAllByShopReviewIdIn(List.of(reviewId));
+        if (images == null || images.isEmpty()) return;
+        deleteImages(images
+                .stream()
+                .map(ReviewImageEntity::getId)
+                .toList());
+    }
+
     private List<ResponseImage> entityListToResponseList(List<ReviewImageEntity> entities) {
         return entities.stream()
                 .map(ResponseImage::fromEntity)
