@@ -50,10 +50,13 @@
               {{ review.content ? review.content : '리뷰 내용이 없습니다.' }}
             </p>
             <small>평점: {{ review.rating ? review.rating : 'x' }}</small>
-            <div>
-              <button>
-                <router-link :to="{ name: 'editReview', id: review.id }">리뷰수정</router-link>
+            <div class="btn-box">
+              <button type="button" class="btn btn-primary">
+                <router-link :to="{ name: 'editReview', id: review.id }" class="edit-link"
+                  >리뷰수정</router-link
+                >
               </button>
+              <button type="button" class="btn btn-danger" @click="deleteReview">리뷰삭제</button>
             </div>
           </div>
         </div>
@@ -90,9 +93,9 @@ import { useRoute, useRouter } from 'vue-router';
 const review = ref<ResponseReview>({ shop: { title: '', address: '' }, id: 0, createdAt: '' });
 const route = useRoute();
 const router = useRouter();
+const reviewId = route.params.id;
 
 const fetchReview = () => {
-  const reviewId = route.params.id;
   axios
     .get(`/v1/reviews/${reviewId}`)
     .then((res) => {
@@ -107,6 +110,15 @@ const fetchReview = () => {
         router.push({ name: 'myReview' });
       }
     });
+};
+
+const deleteReview = async () => {
+  try {
+    await axios.delete(`/v1/reviews/${reviewId}`);
+    router.push({ name: 'myReview' });
+  } catch {
+    alert('리뷰삭제에 실패했습니다.');
+  }
 };
 
 onMounted(() => {
@@ -188,6 +200,17 @@ body.dark .card-footer {
 
 .card-text {
   white-space: pre-wrap;
+}
+
+.edit-link {
+  color: white;
+}
+
+.btn-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
