@@ -4,6 +4,9 @@
 </p>
 
 - 배포: https://gourmetnote.kro.kr/
+- 테스트용 계정
+ - ID: test1 / test2 / test3
+ - PASSWORD: test1234
 
 ## 프로젝트 소개
 - 공개된 곳에 리뷰를 남기기 싫고 기록 해두고 나중에 참고하고 싶을 때 이용할 수 있는 나만의 리뷰 서비스입니다.
